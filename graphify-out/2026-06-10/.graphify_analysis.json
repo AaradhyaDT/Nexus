@@ -1,0 +1,118 @@
+{
+  "communities": {
+    "0": [
+      "aaradhya_master_nexus",
+      "claude_nexus_session_fastapi",
+      "claude_nexus_session_react_frontend",
+      "readme_chromadb",
+      "readme_postgresql"
+    ],
+    "1": [
+      "aaradhya_master_aaradhya_dev_tamrakar",
+      "aaradhya_master_fuse_ai_fellowship",
+      "aaradhya_master_kec",
+      "aaradhya_master_prakopnet"
+    ]
+  },
+  "cohesion": {
+    "0": 0.4,
+    "1": 0.5
+  },
+  "gods": [
+    {
+      "id": "aaradhya_master_nexus",
+      "label": "Nexus AI Workflow Hub",
+      "degree": 6
+    },
+    {
+      "id": "aaradhya_master_aaradhya_dev_tamrakar",
+      "label": "Aaradhya Dev Tamrakar",
+      "degree": 4
+    },
+    {
+      "id": "aaradhya_master_prakopnet",
+      "label": "PrakopNet",
+      "degree": 2
+    },
+    {
+      "id": "aaradhya_master_fuse_ai_fellowship",
+      "label": "Fuse AI Fellowship",
+      "degree": 1
+    },
+    {
+      "id": "claude_nexus_session_fastapi",
+      "label": "FastAPI Backend",
+      "degree": 1
+    },
+    {
+      "id": "claude_nexus_session_react_frontend",
+      "label": "React Frontend",
+      "degree": 1
+    },
+    {
+      "id": "readme_postgresql",
+      "label": "PostgreSQL",
+      "degree": 1
+    },
+    {
+      "id": "readme_chromadb",
+      "label": "ChromaDB",
+      "degree": 1
+    },
+    {
+      "id": "aaradhya_master_kec",
+      "label": "Kathmandu Engineering College",
+      "degree": 1
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Nexus AI Workflow Hub",
+      "target": "FastAPI Backend",
+      "source_files": [
+        "AARADHYA_MASTER_v89.md",
+        "Claude_Nexus_Session.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `FastAPI Backend` unexpectedly reaches hub `Nexus AI Workflow Hub`"
+    },
+    {
+      "source": "Nexus AI Workflow Hub",
+      "target": "React Frontend",
+      "source_files": [
+        "AARADHYA_MASTER_v89.md",
+        "Claude_Nexus_Session.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `React Frontend` unexpectedly reaches hub `Nexus AI Workflow Hub`"
+    },
+    {
+      "source": "Nexus AI Workflow Hub",
+      "target": "ChromaDB",
+      "source_files": [
+        "AARADHYA_MASTER_v89.md",
+        "README.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "shares_data_with",
+      "why": "connects across different repos/directories; peripheral node `ChromaDB` unexpectedly reaches hub `Nexus AI Workflow Hub`"
+    },
+    {
+      "source": "Nexus AI Workflow Hub",
+      "target": "PostgreSQL",
+      "source_files": [
+        "AARADHYA_MASTER_v89.md",
+        "README.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "shares_data_with",
+      "why": "connects across different repos/directories; peripheral node `PostgreSQL` unexpectedly reaches hub `Nexus AI Workflow Hub`"
+    }
+  ],
+  "tokens": {
+    "input": 9459,
+    "output": 1997
+  }
+}

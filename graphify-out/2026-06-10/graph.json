@@ -1,0 +1,218 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "Aaradhya Dev Tamrakar",
+      "file_type": "concept",
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": "2026-06-10",
+      "author": null,
+      "contributor": null,
+      "community": 1,
+      "norm_label": "aaradhya dev tamrakar",
+      "id": "aaradhya_master_aaradhya_dev_tamrakar"
+    },
+    {
+      "label": "Nexus AI Workflow Hub",
+      "file_type": "code",
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "source_url": "github.com/AaradhyaDT/nexus",
+      "captured_at": "2026-06-10",
+      "author": "Aaradhya Dev Tamrakar",
+      "contributor": null,
+      "community": 0,
+      "norm_label": "nexus ai workflow hub",
+      "id": "aaradhya_master_nexus"
+    },
+    {
+      "label": "PrakopNet",
+      "file_type": "concept",
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": "2026-06-10",
+      "author": null,
+      "contributor": null,
+      "community": 1,
+      "norm_label": "prakopnet",
+      "id": "aaradhya_master_prakopnet"
+    },
+    {
+      "label": "Fuse AI Fellowship",
+      "file_type": "concept",
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Fusemachines",
+      "contributor": null,
+      "community": 1,
+      "norm_label": "fuse ai fellowship",
+      "id": "aaradhya_master_fuse_ai_fellowship"
+    },
+    {
+      "label": "FastAPI Backend",
+      "file_type": "code",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "backend/main.py",
+      "source_url": null,
+      "captured_at": "2026-06-10",
+      "author": null,
+      "contributor": null,
+      "community": 0,
+      "norm_label": "fastapi backend",
+      "id": "claude_nexus_session_fastapi"
+    },
+    {
+      "label": "React Frontend",
+      "file_type": "code",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "frontend/src/App.jsx",
+      "source_url": null,
+      "captured_at": "2026-06-10",
+      "author": null,
+      "contributor": null,
+      "community": 0,
+      "norm_label": "react frontend",
+      "id": "claude_nexus_session_react_frontend"
+    },
+    {
+      "label": "PostgreSQL",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 0,
+      "norm_label": "postgresql",
+      "id": "readme_postgresql"
+    },
+    {
+      "label": "ChromaDB",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 0,
+      "norm_label": "chromadb",
+      "id": "readme_chromadb"
+    },
+    {
+      "label": "Kathmandu Engineering College",
+      "file_type": "concept",
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 1,
+      "norm_label": "kathmandu engineering college",
+      "id": "aaradhya_master_kec"
+    }
+  ],
+  "links": [
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "aaradhya_master_aaradhya_dev_tamrakar",
+      "target": "aaradhya_master_fuse_ai_fellowship"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "aaradhya_master_aaradhya_dev_tamrakar",
+      "target": "aaradhya_master_kec"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "aaradhya_master_aaradhya_dev_tamrakar",
+      "target": "aaradhya_master_nexus"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AARADHYA_MASTER_v89.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "aaradhya_master_aaradhya_dev_tamrakar",
+      "target": "aaradhya_master_prakopnet"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": null,
+      "weight": 0.8,
+      "source": "aaradhya_master_nexus",
+      "target": "aaradhya_master_prakopnet"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "aaradhya_master_nexus",
+      "target": "claude_nexus_session_fastapi"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "aaradhya_master_nexus",
+      "target": "claude_nexus_session_react_frontend"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "aaradhya_master_nexus",
+      "target": "readme_chromadb"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "aaradhya_master_nexus",
+      "target": "readme_postgresql"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "fc896c1717ce604402d179a58b1c370c90e89d0c"
+}
