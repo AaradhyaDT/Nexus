@@ -78,6 +78,21 @@ FastAPI               localhost:8000
             └── Ollama (local)
 ```
 
+## Local Setup
+
+### Backend
+1. `cd backend`
+2. `python -m pip install -r requirements.txt`
+3. Copy `backend/.env.example` to `backend/.env` and fill in `ANTHROPIC_API_KEY` and `GEMINI_API_KEY`
+4. `uvicorn main:app --reload --host 0.0.0.0 --port 8000`
+
+### Frontend
+1. `cd frontend`
+2. `npm install`
+3. `npm run dev`
+
+The frontend sends prompts to `http://localhost:8000/query` and displays Claude and Gemini responses side-by-side.
+
 ---
 
 ## Stack
