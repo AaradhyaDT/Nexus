@@ -40,6 +40,7 @@ Next session picks up exactly where you left off
 ## Features
 
 ### ✅ MVP (v0.1)
+
 - **Project workspaces** — create and switch between projects; all history is project-scoped
 - **Multi-model chat** — Claude and Gemini in one interface
 - **Parallel fan-out** — one prompt, both models respond simultaneously, displayed side-by-side
@@ -47,12 +48,14 @@ Next session picks up exactly where you left off
 - **Semantic memory** — ChromaDB RAG over project notes and past outputs
 
 ### 🔜 v0.5
+
 - Task-aware router (auto-selects best model per task type)
 - GitHub integration
 - Knowledge graph
 - Study Mode (syllabus → HTML study portal)
 
 ### 🔜 v1.0
+
 - Full agent mode with MCP tool support
 - Aider integration for multi-file code edits
 - Local Ollama model support
@@ -81,12 +84,14 @@ FastAPI               localhost:8000
 ## Local Setup
 
 ### Backend
+
 1. `cd backend`
 2. `python -m pip install -r requirements.txt`
 3. Copy `backend/.env.example` to `backend/.env` and fill in `ANTHROPIC_API_KEY` and `GEMINI_API_KEY`
 4. `uvicorn main:app --reload --host 0.0.0.0 --port 8000`
 
 ### Frontend
+
 1. `cd frontend`
 2. `npm install`
 3. `npm run dev`

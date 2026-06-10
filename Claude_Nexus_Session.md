@@ -1,4 +1,5 @@
 # Claude Session — Nexus AI Workflow Hub
+
 *June 10, 2026 — Aaradhya Dev Tamrakar*
 
 ---
@@ -43,6 +44,7 @@ FastAPI Backend (localhost:8000)
    Model Router
 Claude · Gemini · OpenAI · Ollama
 ```
+
 *Redis optional — use in-memory dict for MVP.*
 
 **MCP:** Integration layer for Claude-side tools, NOT the backbone. Gemini/OpenAI don't speak MCP natively.
@@ -54,6 +56,7 @@ Claude · Gemini · OpenAI · Ollama
 ## Orchestration Patterns
 
 **Pattern A — Parallel Fan-Out** (use for comparison/validation):
+
 ```python
 async def fan_out(prompt, models=["claude", "gemini", "gpt"]):
     tasks = [call_model(m, prompt) for m in models]
@@ -61,6 +64,7 @@ async def fan_out(prompt, models=["claude", "gemini", "gpt"]):
 ```
 
 **Pattern B — Sequential Pipeline** (use for complex tasks):
+
 ```
 Router → Model A (analysis) → Model B (implementation) → Model C (review)
 ```
@@ -85,6 +89,7 @@ Routing: rule-based (task_type → model) for MVP. LLM meta-router in v2.
 | Automatic task routing | ❌ v2 |
 
 **8-week breakdown:**
+
 - W1–2: FastAPI + DB schema + model adapter layer
 - W3–4: React frontend + workspace UI + multi-model chat
 - W5–6: Parallel fan-out + ChromaDB RAG
@@ -95,6 +100,7 @@ Routing: rule-based (task_type → model) for MVP. LLM meta-router in v2.
 ## Day 1 Implementation (Tonight — Done ✅ / In Progress)
 
 ### Repo structure
+
 ```
 nexus/
 ├── backend/
@@ -108,6 +114,7 @@ nexus/
 ```
 
 ### Backend skeleton (`backend/main.py`)
+
 ```python
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -154,6 +161,7 @@ async def query(req: PromptRequest):
 ```
 
 ### Frontend skeleton (`frontend/src/App.jsx`)
+
 ```jsx
 import { useState } from "react"
 
@@ -194,6 +202,7 @@ export default function App() {
 ```
 
 ### Day 1 done state
+
 - `localhost:5173` → prompt → both models respond side-by-side in parallel
 - Full stack end-to-end confirmed
 
@@ -222,6 +231,7 @@ export default function App() {
 ## Portfolio Angle
 
 To make Nexus impressive on CV/portfolio:
+
 - Benchmark the router: show routing improves output quality vs. single-model
 - Add SHAP/observability: log model chosen, why, outcome quality
 - Publish technical writeup: "Multi-model orchestration layer with task-aware routing"
