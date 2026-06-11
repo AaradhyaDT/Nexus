@@ -55,7 +55,7 @@ export default function App() {
               <pre>{results.groq}</pre>
             </section>
             <section>
-              <h2>Gemini 1.5 Flash</h2>
+              <h2>Gemini 2.5 Flash</h2>
               <pre>{results.gemini}</pre>
             </section>
           </div>
