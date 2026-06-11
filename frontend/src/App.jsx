@@ -31,7 +31,7 @@ export default function App() {
     <div className="app-shell">
       <header>
         <h1>Nexus AI Workflow Hub</h1>
-        <p>Ask the same prompt to Claude and Gemini in parallel.</p>
+        <p>Ask the same prompt to Groq and Gemini in parallel.</p>
       </header>
 
       <main>
@@ -51,11 +51,11 @@ export default function App() {
         {results && (
           <div className="results-grid">
             <section>
-              <h2>Claude</h2>
-              <pre>{results.claude}</pre>
+              <h2>Groq (Llama 3.1 70B)</h2>
+              <pre>{results.groq}</pre>
             </section>
             <section>
-              <h2>Gemini</h2>
+              <h2>Gemini 1.5 Flash</h2>
               <pre>{results.gemini}</pre>
             </section>
           </div>
