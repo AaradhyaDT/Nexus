@@ -14,35 +14,33 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ANTHROPIC_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 GEMINI_KEY = os.getenv("GEMINI_API_KEY", "")
+GROQ_KEY = os.getenv("GROQ_API_KEY", "")
 
 
 class PromptRequest(BaseModel):
     prompt: str
 
 
-async def call_claude(prompt: str, client: httpx.AsyncClient) -> str:
-    if not ANTHROPIC_KEY:
-        raise RuntimeError("ANTHROPIC_API_KEY is not set")
+
+async def call_groq(prompt: str, client: httpx.AsyncClient) -> str:
+    if not GROQ_KEY:
+        raise RuntimeError("GROQ_API_KEY is not set")
     response = await client.post(
-        "https://api.anthropic.com/v1/messages",
+        "https://api.groq.com/openai/v1/chat/completions",
         headers={
-            "x-api-key": ANTHROPIC_KEY,
-            "anthropic-version": "2023-06-01",   # ← required
+            "Authorization": f"Bearer {GROQ_KEY}",
             "Content-Type": "application/json",
         },
         json={
-            "model": "claude-sonnet-4-20250514",
+            "model": "llama-3.1-70b-versatile",
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": 1000,                   # ← not max_tokens_to_sample
+            "max_tokens": 1000,
         },
         timeout=30.0,
     )
     response.raise_for_status()
-    return response.json()["content"][0]["text"]
-
-
+    return response.json()["choices"][0]["message"]["content"]
 async def call_gemini(prompt: str, client: httpx.AsyncClient) -> str:
     if not GEMINI_KEY:
         raise RuntimeError("GEMINI_API_KEY is not set")
@@ -60,10 +58,10 @@ async def call_gemini(prompt: str, client: httpx.AsyncClient) -> str:
 async def query(req: PromptRequest):
     async with httpx.AsyncClient() as client:
         try:
-            claude_out, gemini_out = await asyncio.gather(
-                call_claude(req.prompt, client),
+            groq_out, gemini_out = await asyncio.gather(
+                call_groq(req.prompt, client),
                 call_gemini(req.prompt, client),
             )
         except Exception as exc:
             raise HTTPException(status_code=500, detail=str(exc))
-    return {"claude": claude_out, "gemini": gemini_out}
+    return {"groq": groq_out, "gemini": gemini_out}
