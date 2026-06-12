@@ -1,5 +1,9 @@
-import os, asyncio, sqlite3, json, re
-from contextlib import contextmanager
+import os
+import asyncio
+import sqlite3
+import json
+import re
+from contextlib import contextmanager, asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -7,18 +11,17 @@ import httpx
 from dotenv import load_dotenv
 
 load_dotenv()
-app = FastAPI(title="Nexus")
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
-DB_PATH    = "nexus.db"
-GROQ_KEYS  = [k.strip() for k in os.getenv("GROQ_API_KEYS",   "").split(",") if k.strip()]
-GEMINI_KEYS= [k.strip() for k in os.getenv("GEMINI_API_KEYS", "").split(",") if k.strip()]
+DB_PATH = "nexus.db"
+GROQ_KEYS = [k.strip() for k in os.getenv("GROQ_API_KEYS", "").split(",") if k.strip()]
+GEMINI_KEYS = [k.strip() for k in os.getenv("GEMINI_API_KEYS", "").split(",") if k.strip()]
 
-# ── DB ──────────────────────────────────────────────────────────────────────────
+# ── DATABASE & LIFESPAN MANAGEMENT ─────────────────────────────────────────────
 
 @contextmanager
 def get_db():
-    conn = sqlite3.connect(DB_PATH)
+    # check_same_thread=False allows multi-threaded FastAPI async workers to use connections
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     try:
         yield conn
@@ -30,43 +33,48 @@ def get_db():
         conn.close()
 
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS projects (
-            id      INTEGER PRIMARY KEY AUTOINCREMENT,
-            name    TEXT    NOT NULL,
-            g_index INTEGER DEFAULT 0,
-            g_email TEXT    DEFAULT '',
-            prompt  TEXT    DEFAULT 'You are a helpful expert assistant.'
-        )
-    """)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS history (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            project_id  INTEGER NOT NULL,
-            prompt      TEXT    NOT NULL,
-            responses   TEXT    NOT NULL,
-            models_used TEXT    NOT NULL,
-            timestamp   DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    try:
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
         conn.execute("""
-            CREATE VIRTUAL TABLE IF NOT EXISTS project_notes_fts
-            USING fts5(project_id UNINDEXED, content)
+            CREATE TABLE IF NOT EXISTS projects (
+                id      INTEGER PRIMARY KEY AUTOINCREMENT,
+                name    TEXT    NOT NULL,
+                g_index INTEGER DEFAULT 0,
+                g_email TEXT    DEFAULT '',
+                prompt  TEXT    DEFAULT 'You are a helpful expert assistant.'
+            )
         """)
-    except sqlite3.OperationalError:
-        pass  # FTS5 unavailable — notes/context injection disabled
-    if not conn.execute("SELECT 1 FROM projects LIMIT 1").fetchone():
-        conn.execute("INSERT INTO projects (name) VALUES ('Default')")
-    conn.commit()
-    conn.close()
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS history (
+                id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                project_id  INTEGER NOT NULL,
+                prompt      TEXT    NOT NULL,
+                responses   TEXT    NOT NULL,
+                models_used TEXT    NOT NULL,
+                timestamp   DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        try:
+            conn.execute("""
+                CREATE VIRTUAL TABLE IF NOT EXISTS project_notes_fts
+                USING fts5(project_id UNINDEXED, content)
+            """)
+        except sqlite3.OperationalError:
+            pass  # FTS5 unavailable — notes/context injection disabled
+            
+        if not conn.execute("SELECT 1 FROM projects LIMIT 1").fetchone():
+            conn.execute("INSERT INTO projects (name) VALUES ('Default')")
+        conn.commit()
 
-@app.on_event("startup")
-def startup(): init_db()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
 
-# ── Pydantic ────────────────────────────────────────────────────────────────────
+app = FastAPI(title="Nexus", lifespan=lifespan)
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+
+# ── DATA VALIDATION LAYERS ──────────────────────────────────────────────────────
 
 class QueryRequest(BaseModel):
     prompt: str
@@ -83,7 +91,7 @@ class NoteCreate(BaseModel):
     project_id: int
     content: str
 
-# ── Key rotation ────────────────────────────────────────────────────────────────
+# ── KEY ROTATION PATTERN ────────────────────────────────────────────────────────
 
 async def with_rotation(keys: list, fn) -> str:
     if not keys:
@@ -99,7 +107,7 @@ async def with_rotation(keys: list, fn) -> str:
             return f"Error: {last}"
     return f"Error: all keys exhausted — {last}"
 
-# ── Model adapters ──────────────────────────────────────────────────────────────
+# ── COMPLIANT LLM ADAPTERS ──────────────────────────────────────────────────────
 
 async def call_groq(prompt: str, system: str, client: httpx.AsyncClient) -> str:
     async def _req(key):
@@ -123,7 +131,10 @@ async def call_gemini(prompt: str, system: str, client: httpx.AsyncClient) -> st
     async def _req(key):
         r = await client.post(
             f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={key}",
-            json={"contents": [{"parts": [{"text": f"{system}\n\nUser: {prompt}"}]}]},
+            json={
+                "systemInstruction": {"parts": [{"text": system}]},
+                "contents": [{"parts": [{"text": prompt}]}]
+            },
             timeout=30
         )
         r.raise_for_status()
@@ -135,7 +146,7 @@ MODEL_ADAPTERS = {
     "gemini": call_gemini,
 }
 
-# ── FTS context injection ───────────────────────────────────────────────────────
+# ── SEARCH CONTEXT INJECTION ────────────────────────────────────────────────────
 
 def fts_context(project_id: int, query: str, limit: int = 3) -> str:
     words = [w for w in re.sub(r'[^\w\s]', '', query).split()[:6] if len(w) > 2]
@@ -155,7 +166,7 @@ def fts_context(project_id: int, query: str, limit: int = 3) -> str:
         pass
     return ""
 
-# ── Routes ──────────────────────────────────────────────────────────────────────
+# ── ROUTE CONTROLLERS ───────────────────────────────────────────────────────────
 
 @app.get("/models")
 def list_models():
