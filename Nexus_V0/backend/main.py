@@ -15,6 +15,7 @@ load_dotenv()
 DB_PATH = "nexus.db"
 GROQ_KEYS = [k.strip() for k in os.getenv("GROQ_API_KEYS", "").split(",") if k.strip()]
 GEMINI_KEYS = [k.strip() for k in os.getenv("GEMINI_API_KEYS", "").split(",") if k.strip()]
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 # ── DATABASE & LIFESPAN MANAGEMENT ─────────────────────────────────────────────
 
@@ -130,15 +131,26 @@ async def call_groq(prompt: str, system: str, client: httpx.AsyncClient) -> str:
 async def call_gemini(prompt: str, system: str, client: httpx.AsyncClient) -> str:
     async def _req(key):
         r = await client.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={key}",
+            f"https://generativelanguage.googleapis.com/v1beta2/models/{GEMINI_MODEL}:generateMessage?key={key}",
             json={
-                "systemInstruction": {"parts": [{"text": system}]},
-                "contents": [{"parts": [{"text": prompt}]}]
+                "prompt": {
+                    "messages": [
+                        {
+                            "author": "user",
+                            "content": [
+                                {"type": "text", "text": f"{system}\n\n{prompt}"}
+                            ]
+                        }
+                    ]
+                }
             },
             timeout=30
         )
-        r.raise_for_status()
-        return r.json()["candidates"][0]["content"]["parts"][0]["text"]
+        if r.status_code != 200:
+            err_text = await r.text()
+            raise RuntimeError(f"Gemini request failed {r.status_code}: {err_text}")
+        data = r.json()
+        return data["response"]["content"][0]["text"]
     return await with_rotation(GEMINI_KEYS, _req)
 
 MODEL_ADAPTERS = {
