@@ -1,793 +1,307 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>graphify - D:\Aaradhya\Nexus\graphify-out\graph.html</title>
-    <script
-      src="https://unpkg.com/vis-network@9.1.6/standalone/umd/vis-network.min.js"
-      integrity="sha384-Ux6phic9PEHJ38YtrijhkzyJ8yQlH8i/+buBR8s3mAZOJrP1gwyvAcIYl3GWtpX1"
-      crossorigin="anonymous"
-    ></script>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        background: #0f0f1a;
-        color: #e0e0e0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        display: flex;
-        height: 100vh;
-        overflow: hidden;
-      }
-      #graph {
-        flex: 1;
-      }
-      #sidebar {
-        width: 280px;
-        background: #1a1a2e;
-        border-left: 1px solid #2a2a4e;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      #search-wrap {
-        padding: 12px;
-        border-bottom: 1px solid #2a2a4e;
-      }
-      #search {
-        width: 100%;
-        background: #0f0f1a;
-        border: 1px solid #3a3a5e;
-        color: #e0e0e0;
-        padding: 7px 10px;
-        border-radius: 6px;
-        font-size: 13px;
-        outline: none;
-      }
-      #search:focus {
-        border-color: #4e79a7;
-      }
-      #search-results {
-        max-height: 140px;
-        overflow-y: auto;
-        padding: 4px 12px;
-        border-bottom: 1px solid #2a2a4e;
-        display: none;
-      }
-      .search-item {
-        padding: 4px 6px;
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 12px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .search-item:hover {
-        background: #2a2a4e;
-      }
-      #info-panel {
-        padding: 14px;
-        border-bottom: 1px solid #2a2a4e;
-        min-height: 140px;
-      }
-      #info-panel h3 {
-        font-size: 13px;
-        color: #aaa;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-      #info-content {
-        font-size: 13px;
-        color: #ccc;
-        line-height: 1.6;
-      }
-      #info-content .field {
-        margin-bottom: 5px;
-      }
-      #info-content .field b {
-        color: #e0e0e0;
-      }
-      #info-content .empty {
-        color: #555;
-        font-style: italic;
-      }
-      .neighbor-link {
-        display: block;
-        padding: 2px 6px;
-        margin: 2px 0;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 12px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        border-left: 3px solid #333;
-      }
-      .neighbor-link:hover {
-        background: #2a2a4e;
-      }
-      #neighbors-list {
-        max-height: 160px;
-        overflow-y: auto;
-        margin-top: 4px;
-      }
-      #legend-wrap {
-        flex: 1;
-        overflow-y: auto;
-        padding: 12px;
-      }
-      #legend-wrap h3 {
-        font-size: 13px;
-        color: #aaa;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-      .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 4px 0;
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 12px;
-      }
-      .legend-item:hover {
-        background: #2a2a4e;
-        padding-left: 4px;
-      }
-      .legend-item.dimmed {
-        opacity: 0.35;
-      }
-      .legend-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-      .legend-label {
-        flex: 1;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .legend-count {
-        color: #666;
-        font-size: 11px;
-      }
-      #stats {
-        padding: 10px 14px;
-        border-top: 1px solid #2a2a4e;
-        font-size: 11px;
-        color: #555;
-      }
-      #legend-controls {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-        padding: 4px 0;
-      }
-      #legend-controls label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-        font-size: 12px;
-        color: #aaa;
-        user-select: none;
-      }
-      #legend-controls label:hover {
-        color: #e0e0e0;
-      }
-      .legend-cb,
-      #select-all-cb {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 14px;
-        height: 14px;
-        border: 1.5px solid #3a3a5e;
-        border-radius: 3px;
-        background: #0f0f1a;
-        cursor: pointer;
-        position: relative;
-        flex-shrink: 0;
-      }
-      .legend-cb:checked,
-      #select-all-cb:checked {
-        background: #4e79a7;
-        border-color: #4e79a7;
-      }
-      .legend-cb:checked::after,
-      #select-all-cb:checked::after {
-        content: "";
-        position: absolute;
-        left: 3.5px;
-        top: 1px;
-        width: 4px;
-        height: 7px;
-        border: solid #fff;
-        border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
-      }
-      #select-all-cb:indeterminate {
-        background: #4e79a7;
-        border-color: #4e79a7;
-      }
-      #select-all-cb:indeterminate::after {
-        content: "";
-        position: absolute;
-        left: 2px;
-        top: 5px;
-        width: 8px;
-        height: 2px;
-        background: #fff;
-        border: none;
-        transform: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="graph"></div>
-    <div id="sidebar">
-      <div id="search-wrap">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search nodes..."
-          autocomplete="off"
-        />
-        <div id="search-results"></div>
-      </div>
-      <div id="info-panel">
-        <h3>Node Info</h3>
-        <div id="info-content">
-          <span class="empty">Click a node to inspect it</span>
-        </div>
-      </div>
-      <div id="legend-wrap">
-        <h3>Communities</h3>
-        <div id="legend-controls">
-          <label
-            ><input
-              type="checkbox"
-              id="select-all-cb"
-              checked
-              onchange="toggleAllCommunities(!this.checked)"
-            />Select All</label
-          >
-        </div>
-        <div id="legend"></div>
-      </div>
-      <div id="stats">9 nodes &middot; 9 edges &middot; 2 communities</div>
+<head>
+<meta charset="UTF-8">
+<title>graphify - graphify-out\graph.html</title>
+<script src="https://unpkg.com/vis-network@9.1.6/standalone/umd/vis-network.min.js"
+        integrity="sha384-Ux6phic9PEHJ38YtrijhkzyJ8yQlH8i/+buBR8s3mAZOJrP1gwyvAcIYl3GWtpX1"
+        crossorigin="anonymous"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f0f1a; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; display: flex; height: 100vh; overflow: hidden; }
+  #graph { flex: 1; }
+  #sidebar { width: 280px; background: #1a1a2e; border-left: 1px solid #2a2a4e; display: flex; flex-direction: column; overflow: hidden; }
+  #search-wrap { padding: 12px; border-bottom: 1px solid #2a2a4e; }
+  #search { width: 100%; background: #0f0f1a; border: 1px solid #3a3a5e; color: #e0e0e0; padding: 7px 10px; border-radius: 6px; font-size: 13px; outline: none; }
+  #search:focus { border-color: #4E79A7; }
+  #search-results { max-height: 140px; overflow-y: auto; padding: 4px 12px; border-bottom: 1px solid #2a2a4e; display: none; }
+  .search-item { padding: 4px 6px; cursor: pointer; border-radius: 4px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .search-item:hover { background: #2a2a4e; }
+  #info-panel { padding: 14px; border-bottom: 1px solid #2a2a4e; min-height: 140px; }
+  #info-panel h3 { font-size: 13px; color: #aaa; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  #info-content { font-size: 13px; color: #ccc; line-height: 1.6; }
+  #info-content .field { margin-bottom: 5px; }
+  #info-content .field b { color: #e0e0e0; }
+  #info-content .empty { color: #555; font-style: italic; }
+  .neighbor-link { display: block; padding: 2px 6px; margin: 2px 0; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 3px solid #333; }
+  .neighbor-link:hover { background: #2a2a4e; }
+  #neighbors-list { max-height: 160px; overflow-y: auto; margin-top: 4px; }
+  #legend-wrap { flex: 1; overflow-y: auto; padding: 12px; }
+  #legend-wrap h3 { font-size: 13px; color: #aaa; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .legend-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; border-radius: 4px; font-size: 12px; }
+  .legend-item:hover { background: #2a2a4e; padding-left: 4px; }
+  .legend-item.dimmed { opacity: 0.35; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .legend-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .legend-count { color: #666; font-size: 11px; }
+  #stats { padding: 10px 14px; border-top: 1px solid #2a2a4e; font-size: 11px; color: #555; }
+  #legend-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding: 4px 0; }
+  #legend-controls label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px; color: #aaa; user-select: none; }
+  #legend-controls label:hover { color: #e0e0e0; }
+  .legend-cb, #select-all-cb { appearance: none; -webkit-appearance: none; width: 14px; height: 14px; border: 1.5px solid #3a3a5e; border-radius: 3px; background: #0f0f1a; cursor: pointer; position: relative; flex-shrink: 0; }
+  .legend-cb:checked, #select-all-cb:checked { background: #4E79A7; border-color: #4E79A7; }
+  .legend-cb:checked::after, #select-all-cb:checked::after { content: ''; position: absolute; left: 3.5px; top: 1px; width: 4px; height: 7px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  #select-all-cb:indeterminate { background: #4E79A7; border-color: #4E79A7; }
+  #select-all-cb:indeterminate::after { content: ''; position: absolute; left: 2px; top: 5px; width: 8px; height: 2px; background: #fff; border: none; transform: none; }
+</style>
+</head>
+<body>
+<div id="graph"></div>
+<div id="sidebar">
+  <div id="search-wrap">
+    <input id="search" type="text" placeholder="Search nodes..." autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+  <div id="info-panel">
+    <h3>Node Info</h3>
+    <div id="info-content"><span class="empty">Click a node to inspect it</span></div>
+  </div>
+  <div id="legend-wrap">
+    <h3>Communities</h3>
+    <div id="legend-controls">
+      <label><input type="checkbox" id="select-all-cb" checked onchange="toggleAllCommunities(!this.checked)">Select All</label>
     </div>
-    <script>
-      const RAW_NODES = [
-        {
-          id: "aaradhya_master_aaradhya_dev_tamrakar",
-          label: "Aaradhya Dev Tamrakar",
-          color: {
-            background: "#F28E2B",
-            border: "#F28E2B",
-            highlight: { background: "#ffffff", border: "#F28E2B" },
-          },
-          size: 30.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "Aaradhya Dev Tamrakar",
-          community: 1,
-          community_name: "Community 1",
-          source_file: "AARADHYA_MASTER_v89.md",
-          file_type: "concept",
-          degree: 4,
-        },
-        {
-          id: "aaradhya_master_nexus",
-          label: "Nexus AI Workflow Hub",
-          color: {
-            background: "#4E79A7",
-            border: "#4E79A7",
-            highlight: { background: "#ffffff", border: "#4E79A7" },
-          },
-          size: 40.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "Nexus AI Workflow Hub",
-          community: 0,
-          community_name: "Community 0",
-          source_file: "AARADHYA_MASTER_v89.md",
-          file_type: "code",
-          degree: 6,
-        },
-        {
-          id: "aaradhya_master_prakopnet",
-          label: "PrakopNet",
-          color: {
-            background: "#F28E2B",
-            border: "#F28E2B",
-            highlight: { background: "#ffffff", border: "#F28E2B" },
-          },
-          size: 20.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "PrakopNet",
-          community: 1,
-          community_name: "Community 1",
-          source_file: "AARADHYA_MASTER_v89.md",
-          file_type: "concept",
-          degree: 2,
-        },
-        {
-          id: "aaradhya_master_fuse_ai_fellowship",
-          label: "Fuse AI Fellowship",
-          color: {
-            background: "#F28E2B",
-            border: "#F28E2B",
-            highlight: { background: "#ffffff", border: "#F28E2B" },
-          },
-          size: 15.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "Fuse AI Fellowship",
-          community: 1,
-          community_name: "Community 1",
-          source_file: "AARADHYA_MASTER_v89.md",
-          file_type: "concept",
-          degree: 1,
-        },
-        {
-          id: "claude_nexus_session_fastapi",
-          label: "FastAPI Backend",
-          color: {
-            background: "#4E79A7",
-            border: "#4E79A7",
-            highlight: { background: "#ffffff", border: "#4E79A7" },
-          },
-          size: 15.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "FastAPI Backend",
-          community: 0,
-          community_name: "Community 0",
-          source_file: "Claude_Nexus_Session.md",
-          file_type: "code",
-          degree: 1,
-        },
-        {
-          id: "claude_nexus_session_react_frontend",
-          label: "React Frontend",
-          color: {
-            background: "#4E79A7",
-            border: "#4E79A7",
-            highlight: { background: "#ffffff", border: "#4E79A7" },
-          },
-          size: 15.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "React Frontend",
-          community: 0,
-          community_name: "Community 0",
-          source_file: "Claude_Nexus_Session.md",
-          file_type: "code",
-          degree: 1,
-        },
-        {
-          id: "readme_postgresql",
-          label: "PostgreSQL",
-          color: {
-            background: "#4E79A7",
-            border: "#4E79A7",
-            highlight: { background: "#ffffff", border: "#4E79A7" },
-          },
-          size: 15.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "PostgreSQL",
-          community: 0,
-          community_name: "Community 0",
-          source_file: "README.md",
-          file_type: "concept",
-          degree: 1,
-        },
-        {
-          id: "readme_chromadb",
-          label: "ChromaDB",
-          color: {
-            background: "#4E79A7",
-            border: "#4E79A7",
-            highlight: { background: "#ffffff", border: "#4E79A7" },
-          },
-          size: 15.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "ChromaDB",
-          community: 0,
-          community_name: "Community 0",
-          source_file: "README.md",
-          file_type: "concept",
-          degree: 1,
-        },
-        {
-          id: "aaradhya_master_kec",
-          label: "Kathmandu Engineering College",
-          color: {
-            background: "#F28E2B",
-            border: "#F28E2B",
-            highlight: { background: "#ffffff", border: "#F28E2B" },
-          },
-          size: 15.0,
-          font: { size: 12, color: "#ffffff" },
-          title: "Kathmandu Engineering College",
-          community: 1,
-          community_name: "Community 1",
-          source_file: "AARADHYA_MASTER_v89.md",
-          file_type: "concept",
-          degree: 1,
-        },
-      ];
-      const RAW_EDGES = [
-        {
-          from: "aaradhya_master_aaradhya_dev_tamrakar",
-          to: "aaradhya_master_fuse_ai_fellowship",
-          label: "references",
-          title: "references [EXTRACTED]",
-          dashes: false,
-          width: 2,
-          color: { opacity: 0.7 },
-          confidence: "EXTRACTED",
-        },
-        {
-          from: "aaradhya_master_aaradhya_dev_tamrakar",
-          to: "aaradhya_master_kec",
-          label: "references",
-          title: "references [EXTRACTED]",
-          dashes: false,
-          width: 2,
-          color: { opacity: 0.7 },
-          confidence: "EXTRACTED",
-        },
-        {
-          from: "aaradhya_master_aaradhya_dev_tamrakar",
-          to: "aaradhya_master_nexus",
-          label: "implements",
-          title: "implements [EXTRACTED]",
-          dashes: false,
-          width: 2,
-          color: { opacity: 0.7 },
-          confidence: "EXTRACTED",
-        },
-        {
-          from: "aaradhya_master_aaradhya_dev_tamrakar",
-          to: "aaradhya_master_prakopnet",
-          label: "references",
-          title: "references [EXTRACTED]",
-          dashes: false,
-          width: 2,
-          color: { opacity: 0.7 },
-          confidence: "EXTRACTED",
-        },
-        {
-          from: "aaradhya_master_nexus",
-          to: "aaradhya_master_prakopnet",
-          label: "conceptually_related_to",
-          title: "conceptually_related_to [INFERRED]",
-          dashes: true,
-          width: 1,
-          color: { opacity: 0.35 },
-          confidence: "INFERRED",
-        },
-        {
-          from: "aaradhya_master_nexus",
-          to: "claude_nexus_session_fastapi",
-          label: "references",
-          title: "references [EXTRACTED]",
-          dashes: false,
-          width: 2,
-          color: { opacity: 0.7 },
-          confidence: "EXTRACTED",
-        },
-        {
-          from: "aaradhya_master_nexus",
-          to: "claude_nexus_session_react_frontend",
-          label: "references",
-          title: "references [EXTRACTED]",
-          dashes: false,
-          width: 2,
-          color: { opacity: 0.7 },
-          confidence: "EXTRACTED",
-        },
-        {
-          from: "aaradhya_master_nexus",
-          to: "readme_chromadb",
-          label: "shares_data_with",
-          title: "shares_data_with [EXTRACTED]",
-          dashes: false,
-          width: 2,
-          color: { opacity: 0.7 },
-          confidence: "EXTRACTED",
-        },
-        {
-          from: "aaradhya_master_nexus",
-          to: "readme_postgresql",
-          label: "shares_data_with",
-          title: "shares_data_with [EXTRACTED]",
-          dashes: false,
-          width: 2,
-          color: { opacity: 0.7 },
-          confidence: "EXTRACTED",
-        },
-      ];
-      const LEGEND = [
-        { cid: 0, color: "#4E79A7", label: "Community 0", count: 5 },
-        { cid: 1, color: "#F28E2B", label: "Community 1", count: 4 },
-      ];
+    <div id="legend"></div>
+  </div>
+  <div id="stats">115 nodes &middot; 128 edges &middot; 10 communities</div>
+</div>
+<script>
+const RAW_NODES = [{"id": "backend_main", "label": "main.py", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 40.0, "font": {"size": 12, "color": "#ffffff"}, "title": "main.py", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 16}, {"id": "backend_main_get_db", "label": "get_db()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 23.1, "font": {"size": 12, "color": "#ffffff"}, "title": "get_db()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 7}, {"id": "backend_main_init_db", "label": "init_db()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "init_db()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 2}, {"id": "backend_main_startup", "label": "startup()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "startup()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 2}, {"id": "backend_main_queryrequest", "label": "QueryRequest", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "QueryRequest", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 3}, {"id": "basemodel", "label": "BaseModel", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "BaseModel", "community": 1, "community_name": "Community 1", "source_file": "", "file_type": "code", "degree": 3}, {"id": "backend_main_projectcreate", "label": "ProjectCreate", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "ProjectCreate", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 3}, {"id": "backend_main_notecreate", "label": "NoteCreate", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "NoteCreate", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 3}, {"id": "backend_main_with_rotation", "label": "with_rotation()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "with_rotation()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 4}, {"id": "str", "label": "str", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "str", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 4}, {"id": "backend_main_call_groq", "label": "call_groq()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "call_groq()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 4}, {"id": "asyncclient", "label": "AsyncClient", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "AsyncClient", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 3}, {"id": "backend_main_call_gemini", "label": "call_gemini()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "call_gemini()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 4}, {"id": "backend_main_fts_context", "label": "fts_context()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 19.4, "font": {"size": 12, "color": "#ffffff"}, "title": "fts_context()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 5}, {"id": "int", "label": "int", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "int", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 2}, {"id": "backend_main_list_models", "label": "list_models()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "list_models()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 1}, {"id": "backend_main_list_projects", "label": "list_projects()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "list_projects()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 2}, {"id": "backend_main_create_project", "label": "create_project()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "create_project()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 3}, {"id": "backend_main_get_messages", "label": "get_messages()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "get_messages()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 3}, {"id": "backend_main_handle_query", "label": "handle_query()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 19.4, "font": {"size": 12, "color": "#ffffff"}, "title": "handle_query()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 5}, {"id": "backend_main_add_note", "label": "add_note()", "color": {"background": "#F28E2B", "border": "#F28E2B", "highlight": {"background": "#ffffff", "border": "#F28E2B"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "add_note()", "community": 1, "community_name": "Community 1", "source_file": "Nexus_V0/backend/main.py", "file_type": "code", "degree": 3}, {"id": "frontend_package", "label": "package.json", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 23.1, "font": {"size": 12, "color": "#ffffff"}, "title": "package.json", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 7}, {"id": "frontend_package_name", "label": "name", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "name", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_private", "label": "private", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "private", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_version", "label": "version", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "version", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_type", "label": "type", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "type", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_scripts", "label": "scripts", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "scripts", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 4}, {"id": "frontend_package_scripts_dev", "label": "dev", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "dev", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_scripts_build", "label": "build", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "build", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_scripts_preview", "label": "preview", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "preview", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_dependencies", "label": "dependencies", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "dependencies", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 3}, {"id": "frontend_package_dependencies_react", "label": "react", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "react", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_dependencies_react_dom", "label": "react-dom", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "react-dom", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_devdependencies", "label": "devDependencies", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 15.6, "font": {"size": 12, "color": "#ffffff"}, "title": "devDependencies", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 3}, {"id": "frontend_package_devdependencies_vitejs_plugin_react", "label": "@vitejs/plugin-react", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "@vitejs/plugin-react", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "frontend_package_devdependencies_vite", "label": "vite", "color": {"background": "#59A14F", "border": "#59A14F", "highlight": {"background": "#ffffff", "border": "#59A14F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "vite", "community": 4, "community_name": "Community 4", "source_file": "Nexus_V0/frontend/package.json", "file_type": "code", "degree": 1}, {"id": "src_app", "label": "App.jsx", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "App.jsx", "community": 8, "community_name": "Community 8", "source_file": "Nexus_V0/frontend/src/App.jsx", "file_type": "code", "degree": 4}, {"id": "src_app_google", "label": "GOOGLE", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "GOOGLE", "community": 8, "community_name": "Community 8", "source_file": "Nexus_V0/frontend/src/App.jsx", "file_type": "code", "degree": 1}, {"id": "src_app_model_label", "label": "MODEL_LABEL", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "MODEL_LABEL", "community": 8, "community_name": "Community 8", "source_file": "Nexus_V0/frontend/src/App.jsx", "file_type": "code", "degree": 1}, {"id": "src_app_app", "label": "App()", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "App()", "community": 8, "community_name": "Community 8", "source_file": "Nexus_V0/frontend/src/App.jsx", "file_type": "code", "degree": 1}, {"id": "src_main", "label": "main.jsx", "color": {"background": "#9C755F", "border": "#9C755F", "highlight": {"background": "#ffffff", "border": "#9C755F"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "main.jsx", "community": 8, "community_name": "Community 8", "source_file": "Nexus_V0/frontend/src/main.jsx", "file_type": "code", "degree": 1}, {"id": "frontend_vite_config", "label": "vite.config.js", "color": {"background": "#BAB0AC", "border": "#BAB0AC", "highlight": {"background": "#ffffff", "border": "#BAB0AC"}}, "size": 10.0, "font": {"size": 0, "color": "#ffffff"}, "title": "vite.config.js", "community": 9, "community_name": "Community 9", "source_file": "Nexus_V0/frontend/vite.config.js", "file_type": "code", "degree": 0}, {"id": "claude_nexus_session", "label": "Claude_Nexus_Session.md", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Claude_Nexus_Session.md", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "label": "Claude Session \u2014 Nexus AI Workflow Hub", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 32.5, "font": {"size": 12, "color": "#ffffff"}, "title": "Claude Session \u2014 Nexus AI Workflow Hub", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 12}, {"id": "claude_nexus_session_session_summary", "label": "Session Summary", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Session Summary", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_project_vision", "label": "Project Vision", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Project Vision", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_architecture_decision", "label": "Architecture Decision", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Architecture Decision", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_orchestration_patterns", "label": "Orchestration Patterns", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Orchestration Patterns", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_mvp_scope_8_weeks_nightly_sessions", "label": "MVP Scope (8 weeks, nightly sessions)", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "MVP Scope (8 weeks, nightly sessions)", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_day_1_implementation_tonight_done_in_progress", "label": "Day 1 Implementation (Tonight \u2014 Done \u2705 / In Progress)", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 19.4, "font": {"size": 12, "color": "#ffffff"}, "title": "Day 1 Implementation (Tonight \u2014 Done \u2705 / In Progress)", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 5}, {"id": "claude_nexus_session_repo_structure", "label": "Repo structure", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Repo structure", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_backend_skeleton_backend_main_py", "label": "Backend skeleton (`backend/main.py`)", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Backend skeleton (`backend/main.py`)", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_frontend_skeleton_frontend_src_app_jsx", "label": "Frontend skeleton (`frontend/src/App.jsx`)", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Frontend skeleton (`frontend/src/App.jsx`)", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_day_1_done_state", "label": "Day 1 done state", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Day 1 done state", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_next_session_day_2_postgres_layer", "label": "Next Session (Day 2) \u2014 Postgres Layer", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Next Session (Day 2) \u2014 Postgres Layer", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_risks_to_watch", "label": "Risks to Watch", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Risks to Watch", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_portfolio_angle", "label": "Portfolio Angle", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Portfolio Angle", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_strategic_note", "label": "Strategic Note", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Strategic Note", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "claude_nexus_session_context_links", "label": "Context Links", "color": {"background": "#E15759", "border": "#E15759", "highlight": {"background": "#ffffff", "border": "#E15759"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Context Links", "community": 2, "community_name": "Community 2", "source_file": "Claude_Nexus_Session.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan", "label": "Nexus_Day1_TaskPlan.md", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Nexus_Day1_TaskPlan.md", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_nexus_day_1_task_plan", "label": "Nexus Day 1 \u2014 Task Plan", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 23.1, "font": {"size": 12, "color": "#ffffff"}, "title": "Nexus Day 1 \u2014 Task Plan", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 7}, {"id": "nexus_day1_taskplan_goal", "label": "Goal", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Goal", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_files", "label": "Files", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Files", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_tasks", "label": "Tasks", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 26.9, "font": {"size": 12, "color": "#ffffff"}, "title": "Tasks", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 9}, {"id": "nexus_day1_taskplan_t1_repo_scaffold", "label": "T1 \u2014 Repo scaffold \u2705", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T1 \u2014 Repo scaffold \u2705", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_t2_backend_skeleton", "label": "T2 \u2014 Backend skeleton \u2705", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T2 \u2014 Backend skeleton \u2705", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_t3_model_adapters_with_fixes", "label": "T3 \u2014 Model adapters \u2705 (with fixes)", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T3 \u2014 Model adapters \u2705 (with fixes)", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_t4_multi_key_rotation_added_day_1_close", "label": "T4 \u2014 Multi-key rotation \u2705 (added Day 1 close)", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T4 \u2014 Multi-key rotation \u2705 (added Day 1 close)", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_t5_query_route", "label": "T5 \u2014 `/query` route \u2705", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T5 \u2014 `/query` route \u2705", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_t6_frontend_ui_with_fixes", "label": "T6 \u2014 Frontend UI \u2705 (with fixes)", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T6 \u2014 Frontend UI \u2705 (with fixes)", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_t7_env_security", "label": "T7 \u2014 `.env` security \u2705", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T7 \u2014 `.env` security \u2705", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_t8_day_1_verification", "label": "T8 \u2014 Day 1 verification", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T8 \u2014 Day 1 verification", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_done_state", "label": "Done State", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Done State", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_known_issues_resolved", "label": "Known Issues Resolved", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Known Issues Resolved", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day1_taskplan_day_2", "label": "Day 2 \u2192", "color": {"background": "#76B7B2", "border": "#76B7B2", "highlight": {"background": "#ffffff", "border": "#76B7B2"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Day 2 \u2192", "community": 3, "community_name": "Community 3", "source_file": "Nexus_Day1_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan", "label": "Nexus_Day2_TaskPlan.md", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Nexus_Day2_TaskPlan.md", "community": 7, "community_name": "Community 7", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "label": "Nexus Day 2 \u2014 Complete Task Plan", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 25.0, "font": {"size": 12, "color": "#ffffff"}, "title": "Nexus Day 2 \u2014 Complete Task Plan", "community": 7, "community_name": "Community 7", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 8}, {"id": "nexus_day2_taskplan_scope", "label": "Scope", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Scope", "community": 7, "community_name": "Community 7", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_files_changed", "label": "Files Changed", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Files Changed", "community": 7, "community_name": "Community 7", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_db_schema", "label": "DB Schema", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "DB Schema", "community": 7, "community_name": "Community 7", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_api_routes", "label": "API Routes", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "API Routes", "community": 7, "community_name": "Community 7", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_task_sequence", "label": "Task Sequence", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 30.6, "font": {"size": 12, "color": "#ffffff"}, "title": "Task Sequence", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 11}, {"id": "nexus_day2_taskplan_t1_requirements_txt", "label": "T1 \u2014 `requirements.txt`", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T1 \u2014 `requirements.txt`", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t2_env_example", "label": "T2 \u2014 `.env.example`", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T2 \u2014 `.env.example`", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t3_main_py_model_adapters", "label": "T3 \u2014 `main.py` \u2014 Model Adapters", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T3 \u2014 `main.py` \u2014 Model Adapters", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t4_main_py_db_init", "label": "T4 \u2014 `main.py` \u2014 DB Init", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T4 \u2014 `main.py` \u2014 DB Init", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t5_main_py_routes", "label": "T5 \u2014 `main.py` \u2014 Routes", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T5 \u2014 `main.py` \u2014 Routes", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t6_app_jsx_state", "label": "T6 \u2014 `App.jsx` \u2014 State", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T6 \u2014 `App.jsx` \u2014 State", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t7_app_jsx_project_sidebar", "label": "T7 \u2014 `App.jsx` \u2014 Project Sidebar", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T7 \u2014 `App.jsx` \u2014 Project Sidebar", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t8_app_jsx_model_selector", "label": "T8 \u2014 `App.jsx` \u2014 Model Selector", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T8 \u2014 `App.jsx` \u2014 Model Selector", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t9_app_jsx_results_history", "label": "T9 \u2014 `App.jsx` \u2014 Results + History", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T9 \u2014 `App.jsx` \u2014 Results + History", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_t10_style_css_layout", "label": "T10 \u2014 `style.css` \u2014 Layout", "color": {"background": "#B07AA1", "border": "#B07AA1", "highlight": {"background": "#ffffff", "border": "#B07AA1"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "T10 \u2014 `style.css` \u2014 Layout", "community": 6, "community_name": "Community 6", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_done_state_end_of_day_2", "label": "Done State (end of Day 2)", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Done State (end of Day 2)", "community": 7, "community_name": "Community 7", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "nexus_day2_taskplan_day_3_preview", "label": "Day 3 Preview", "color": {"background": "#FF9DA7", "border": "#FF9DA7", "highlight": {"background": "#ffffff", "border": "#FF9DA7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Day 3 Preview", "community": 7, "community_name": "Community 7", "source_file": "Nexus_Day2_TaskPlan.md", "file_type": "document", "degree": 1}, {"id": "readme", "label": "README.md", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "README.md", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_nexus", "label": "Nexus", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 25.0, "font": {"size": 12, "color": "#ffffff"}, "title": "Nexus", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 8}, {"id": "readme_architecture", "label": "Architecture", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Architecture", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_features_v0_2", "label": "Features (v0.2)", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Features (v0.2)", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_setup", "label": "Setup", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "Setup", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 4}, {"id": "readme_backend", "label": "Backend", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Backend", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_frontend", "label": "Frontend", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Frontend", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_env_format", "label": ".env format", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": ".env format", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_api", "label": "API", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "API", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_stack", "label": "Stack", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Stack", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_google_account_routing", "label": "Google Account Routing", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Google Account Routing", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "readme_roadmap", "label": "Roadmap", "color": {"background": "#EDC948", "border": "#EDC948", "highlight": {"background": "#ffffff", "border": "#EDC948"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Roadmap", "community": 5, "community_name": "Community 5", "source_file": "README.md", "file_type": "document", "degree": 1}, {"id": "aaradhya_master_aaradhya_dev_tamrakar", "label": "Aaradhya Dev Tamrakar", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 17.5, "font": {"size": 12, "color": "#ffffff"}, "title": "Aaradhya Dev Tamrakar", "community": 0, "community_name": "Community 0", "source_file": "AARADHYA_MASTER_v89.md", "file_type": "concept", "degree": 4}, {"id": "aaradhya_master_nexus", "label": "Nexus AI Workflow Hub", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 21.2, "font": {"size": 12, "color": "#ffffff"}, "title": "Nexus AI Workflow Hub", "community": 0, "community_name": "Community 0", "source_file": "AARADHYA_MASTER_v89.md", "file_type": "code", "degree": 6}, {"id": "aaradhya_master_prakopnet", "label": "PrakopNet", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 13.8, "font": {"size": 0, "color": "#ffffff"}, "title": "PrakopNet", "community": 0, "community_name": "Community 0", "source_file": "AARADHYA_MASTER_v89.md", "file_type": "concept", "degree": 2}, {"id": "aaradhya_master_fuse_ai_fellowship", "label": "Fuse AI Fellowship", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Fuse AI Fellowship", "community": 0, "community_name": "Community 0", "source_file": "AARADHYA_MASTER_v89.md", "file_type": "concept", "degree": 1}, {"id": "claude_nexus_session_fastapi", "label": "FastAPI Backend", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "FastAPI Backend", "community": 0, "community_name": "Community 0", "source_file": "Claude_Nexus_Session.md", "file_type": "code", "degree": 1}, {"id": "claude_nexus_session_react_frontend", "label": "React Frontend", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "React Frontend", "community": 0, "community_name": "Community 0", "source_file": "Claude_Nexus_Session.md", "file_type": "code", "degree": 1}, {"id": "readme_postgresql", "label": "PostgreSQL", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "PostgreSQL", "community": 0, "community_name": "Community 0", "source_file": "README.md", "file_type": "concept", "degree": 1}, {"id": "readme_chromadb", "label": "ChromaDB", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "ChromaDB", "community": 0, "community_name": "Community 0", "source_file": "README.md", "file_type": "concept", "degree": 1}, {"id": "aaradhya_master_kec", "label": "Kathmandu Engineering College", "color": {"background": "#4E79A7", "border": "#4E79A7", "highlight": {"background": "#ffffff", "border": "#4E79A7"}}, "size": 11.9, "font": {"size": 0, "color": "#ffffff"}, "title": "Kathmandu Engineering College", "community": 0, "community_name": "Community 0", "source_file": "AARADHYA_MASTER_v89.md", "file_type": "concept", "degree": 1}];
+const RAW_EDGES = [{"from": "backend_main", "to": "backend_main_add_note", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_call_gemini", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_call_groq", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_create_project", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_fts_context", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_get_db", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_get_messages", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_handle_query", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_init_db", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_list_models", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_list_projects", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_notecreate", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_projectcreate", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_queryrequest", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_startup", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main", "to": "backend_main_with_rotation", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_add_note", "to": "backend_main_get_db", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_create_project", "to": "backend_main_get_db", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_fts_context", "to": "backend_main_get_db", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_get_messages", "to": "backend_main_get_db", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_handle_query", "to": "backend_main_get_db", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_list_projects", "to": "backend_main_get_db", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_startup", "to": "backend_main_init_db", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_handle_query", "to": "backend_main_queryrequest", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_queryrequest", "to": "basemodel", "label": "inherits", "title": "inherits [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_notecreate", "to": "basemodel", "label": "inherits", "title": "inherits [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_projectcreate", "to": "basemodel", "label": "inherits", "title": "inherits [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_create_project", "to": "backend_main_projectcreate", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_add_note", "to": "backend_main_notecreate", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_call_gemini", "to": "backend_main_with_rotation", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_call_groq", "to": "backend_main_with_rotation", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_with_rotation", "to": "str", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_call_gemini", "to": "str", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_call_groq", "to": "str", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_fts_context", "to": "str", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_call_groq", "to": "asyncclient", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_call_gemini", "to": "asyncclient", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_handle_query", "to": "asyncclient", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_fts_context", "to": "int", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_handle_query", "to": "backend_main_fts_context", "label": "calls", "title": "calls [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "backend_main_get_messages", "to": "int", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package", "to": "frontend_package_dependencies", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package", "to": "frontend_package_devdependencies", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package", "to": "frontend_package_name", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package", "to": "frontend_package_private", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package", "to": "frontend_package_scripts", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package", "to": "frontend_package_type", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package", "to": "frontend_package_version", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package_scripts", "to": "frontend_package_scripts_build", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package_scripts", "to": "frontend_package_scripts_dev", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package_scripts", "to": "frontend_package_scripts_preview", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package_dependencies", "to": "frontend_package_dependencies_react", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package_dependencies", "to": "frontend_package_dependencies_react_dom", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package_devdependencies", "to": "frontend_package_devdependencies_vite", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "frontend_package_devdependencies", "to": "frontend_package_devdependencies_vitejs_plugin_react", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "src_app", "to": "src_app_app", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "src_app", "to": "src_app_google", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "src_app", "to": "src_app_model_label", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "src_main", "to": "src_app", "label": "imports_from", "title": "imports_from [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session", "to": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_architecture_decision", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_context_links", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_day_1_implementation_tonight_done_in_progress", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_mvp_scope_8_weeks_nightly_sessions", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_next_session_day_2_postgres_layer", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_orchestration_patterns", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_portfolio_angle", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_project_vision", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_risks_to_watch", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_session_summary", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_claude_session_nexus_ai_workflow_hub", "to": "claude_nexus_session_strategic_note", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_day_1_implementation_tonight_done_in_progress", "to": "claude_nexus_session_backend_skeleton_backend_main_py", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_day_1_implementation_tonight_done_in_progress", "to": "claude_nexus_session_day_1_done_state", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_day_1_implementation_tonight_done_in_progress", "to": "claude_nexus_session_frontend_skeleton_frontend_src_app_jsx", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "claude_nexus_session_day_1_implementation_tonight_done_in_progress", "to": "claude_nexus_session_repo_structure", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan", "to": "nexus_day1_taskplan_nexus_day_1_task_plan", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_nexus_day_1_task_plan", "to": "nexus_day1_taskplan_day_2", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_nexus_day_1_task_plan", "to": "nexus_day1_taskplan_done_state", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_nexus_day_1_task_plan", "to": "nexus_day1_taskplan_files", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_nexus_day_1_task_plan", "to": "nexus_day1_taskplan_goal", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_nexus_day_1_task_plan", "to": "nexus_day1_taskplan_known_issues_resolved", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_nexus_day_1_task_plan", "to": "nexus_day1_taskplan_tasks", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_tasks", "to": "nexus_day1_taskplan_t1_repo_scaffold", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_tasks", "to": "nexus_day1_taskplan_t2_backend_skeleton", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_tasks", "to": "nexus_day1_taskplan_t3_model_adapters_with_fixes", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_tasks", "to": "nexus_day1_taskplan_t4_multi_key_rotation_added_day_1_close", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_tasks", "to": "nexus_day1_taskplan_t5_query_route", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_tasks", "to": "nexus_day1_taskplan_t6_frontend_ui_with_fixes", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_tasks", "to": "nexus_day1_taskplan_t7_env_security", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day1_taskplan_tasks", "to": "nexus_day1_taskplan_t8_day_1_verification", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan", "to": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "to": "nexus_day2_taskplan_api_routes", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "to": "nexus_day2_taskplan_day_3_preview", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "to": "nexus_day2_taskplan_db_schema", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "to": "nexus_day2_taskplan_done_state_end_of_day_2", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "to": "nexus_day2_taskplan_files_changed", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "to": "nexus_day2_taskplan_scope", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_nexus_day_2_complete_task_plan", "to": "nexus_day2_taskplan_task_sequence", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t10_style_css_layout", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t1_requirements_txt", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t2_env_example", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t3_main_py_model_adapters", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t4_main_py_db_init", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t5_main_py_routes", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t6_app_jsx_state", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t7_app_jsx_project_sidebar", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t8_app_jsx_model_selector", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "nexus_day2_taskplan_task_sequence", "to": "nexus_day2_taskplan_t9_app_jsx_results_history", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme", "to": "readme_nexus", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_nexus", "to": "readme_api", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_nexus", "to": "readme_architecture", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_nexus", "to": "readme_features_v0_2", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_nexus", "to": "readme_google_account_routing", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_nexus", "to": "readme_roadmap", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_nexus", "to": "readme_setup", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_nexus", "to": "readme_stack", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_setup", "to": "readme_backend", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_setup", "to": "readme_env_format", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "readme_setup", "to": "readme_frontend", "label": "contains", "title": "contains [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "aaradhya_master_aaradhya_dev_tamrakar", "to": "aaradhya_master_fuse_ai_fellowship", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "aaradhya_master_aaradhya_dev_tamrakar", "to": "aaradhya_master_kec", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "aaradhya_master_aaradhya_dev_tamrakar", "to": "aaradhya_master_nexus", "label": "implements", "title": "implements [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "aaradhya_master_aaradhya_dev_tamrakar", "to": "aaradhya_master_prakopnet", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "aaradhya_master_nexus", "to": "aaradhya_master_prakopnet", "label": "conceptually_related_to", "title": "conceptually_related_to [INFERRED]", "dashes": true, "width": 1, "color": {"opacity": 0.35}, "confidence": "INFERRED"}, {"from": "aaradhya_master_nexus", "to": "claude_nexus_session_fastapi", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "aaradhya_master_nexus", "to": "claude_nexus_session_react_frontend", "label": "references", "title": "references [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "aaradhya_master_nexus", "to": "readme_chromadb", "label": "shares_data_with", "title": "shares_data_with [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}, {"from": "aaradhya_master_nexus", "to": "readme_postgresql", "label": "shares_data_with", "title": "shares_data_with [EXTRACTED]", "dashes": false, "width": 2, "color": {"opacity": 0.7}, "confidence": "EXTRACTED"}];
+const LEGEND = [{"cid": 0, "color": "#4E79A7", "label": "Community 0", "count": 9}, {"cid": 1, "color": "#F28E2B", "label": "Community 1", "count": 21}, {"cid": 2, "color": "#E15759", "label": "Community 2", "count": 17}, {"cid": 3, "color": "#76B7B2", "label": "Community 3", "count": 16}, {"cid": 4, "color": "#59A14F", "label": "Community 4", "count": 15}, {"cid": 5, "color": "#EDC948", "label": "Community 5", "count": 12}, {"cid": 6, "color": "#B07AA1", "label": "Community 6", "count": 11}, {"cid": 7, "color": "#FF9DA7", "label": "Community 7", "count": 8}, {"cid": 8, "color": "#9C755F", "label": "Community 8", "count": 5}, {"cid": 9, "color": "#BAB0AC", "label": "Community 9", "count": 1}];
 
-      // HTML-escape helper — prevents XSS when injecting graph data into innerHTML
-      function esc(s) {
-        return String(s)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
+// HTML-escape helper — prevents XSS when injecting graph data into innerHTML
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 
-      // Build vis datasets
-      const nodesDS = new vis.DataSet(
-        RAW_NODES.map((n) => ({
-          id: n.id,
-          label: n.label,
-          color: n.color,
-          size: n.size,
-          font: n.font,
-          title: n.title,
-          _community: n.community,
-          _community_name: n.community_name,
-          _source_file: n.source_file,
-          _file_type: n.file_type,
-          _degree: n.degree,
-        })),
-      );
+// Build vis datasets
+const nodesDS = new vis.DataSet(RAW_NODES.map(n => ({
+  id: n.id, label: n.label, color: n.color, size: n.size,
+  font: n.font, title: n.title,
+  _community: n.community, _community_name: n.community_name,
+  _source_file: n.source_file, _file_type: n.file_type, _degree: n.degree,
+})));
 
-      const edgesDS = new vis.DataSet(
-        RAW_EDGES.map((e, i) => ({
-          id: i,
-          from: e.from,
-          to: e.to,
-          label: "",
-          title: e.title,
-          dashes: e.dashes,
-          width: e.width,
-          color: e.color,
-          arrows: { to: { enabled: true, scaleFactor: 0.5 } },
-        })),
-      );
+const edgesDS = new vis.DataSet(RAW_EDGES.map((e, i) => ({
+  id: i, from: e.from, to: e.to,
+  label: '',
+  title: e.title,
+  dashes: e.dashes,
+  width: e.width,
+  color: e.color,
+  arrows: { to: { enabled: true, scaleFactor: 0.5 } },
+})));
 
-      const container = document.getElementById("graph");
-      const network = new vis.Network(
-        container,
-        { nodes: nodesDS, edges: edgesDS },
-        {
-          physics: {
-            enabled: true,
-            solver: "forceAtlas2Based",
-            forceAtlas2Based: {
-              gravitationalConstant: -60,
-              centralGravity: 0.005,
-              springLength: 120,
-              springConstant: 0.08,
-              damping: 0.4,
-              avoidOverlap: 0.8,
-            },
-            stabilization: { iterations: 200, fit: true },
-          },
-          interaction: {
-            hover: true,
-            tooltipDelay: 100,
-            hideEdgesOnDrag: true,
-            navigationButtons: false,
-            keyboard: false,
-          },
-          nodes: { shape: "dot", borderWidth: 1.5 },
-          edges: {
-            smooth: { type: "continuous", roundness: 0.2 },
-            selectionWidth: 3,
-          },
-        },
-      );
+const container = document.getElementById('graph');
+const network = new vis.Network(container, { nodes: nodesDS, edges: edgesDS }, {
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -60,
+      centralGravity: 0.005,
+      springLength: 120,
+      springConstant: 0.08,
+      damping: 0.4,
+      avoidOverlap: 0.8,
+    },
+    stabilization: { iterations: 200, fit: true },
+  },
+  interaction: {
+    hover: true,
+    tooltipDelay: 100,
+    hideEdgesOnDrag: true,
+    navigationButtons: false,
+    keyboard: false,
+  },
+  nodes: { shape: 'dot', borderWidth: 1.5 },
+  edges: { smooth: { type: 'continuous', roundness: 0.2 }, selectionWidth: 3 },
+});
 
-      network.once("stabilizationIterationsDone", () => {
-        network.setOptions({ physics: { enabled: false } });
-      });
+network.once('stabilizationIterationsDone', () => {
+  network.setOptions({ physics: { enabled: false } });
+});
 
-      function showInfo(nodeId) {
-        const n = nodesDS.get(nodeId);
-        if (!n) return;
-        const neighborIds = network.getConnectedNodes(nodeId);
-        const neighborItems = neighborIds
-          .map((nid) => {
-            const nb = nodesDS.get(nid);
-            const color = nb ? nb.color.background : "#555";
-            return `<span class="neighbor-link" style="border-left-color:${esc(color)}" onclick="focusNode(${JSON.stringify(nid)})">${esc(nb ? nb.label : nid)}</span>`;
-          })
-          .join("");
-        document.getElementById("info-content").innerHTML = `
+function showInfo(nodeId) {
+  const n = nodesDS.get(nodeId);
+  if (!n) return;
+  const neighborIds = network.getConnectedNodes(nodeId);
+  const neighborItems = neighborIds.map(nid => {
+    const nb = nodesDS.get(nid);
+    const color = nb ? nb.color.background : '#555';
+    return `<span class="neighbor-link" style="border-left-color:${esc(color)}" onclick="focusNode(${JSON.stringify(nid)})">${esc(nb ? nb.label : nid)}</span>`;
+  }).join('');
+  document.getElementById('info-content').innerHTML = `
     <div class="field"><b>${esc(n.label)}</b></div>
-    <div class="field">Type: ${esc(n._file_type || "unknown")}</div>
+    <div class="field">Type: ${esc(n._file_type || 'unknown')}</div>
     <div class="field">Community: ${esc(n._community_name)}</div>
-    <div class="field">Source: ${esc(n._source_file || "-")}</div>
+    <div class="field">Source: ${esc(n._source_file || '-')}</div>
     <div class="field">Degree: ${n._degree}</div>
-    ${neighborIds.length ? `<div class="field" style="margin-top:8px;color:#aaa;font-size:11px">Neighbors (${neighborIds.length})</div><div id="neighbors-list">${neighborItems}</div>` : ""}
+    ${neighborIds.length ? `<div class="field" style="margin-top:8px;color:#aaa;font-size:11px">Neighbors (${neighborIds.length})</div><div id="neighbors-list">${neighborItems}</div>` : ''}
   `;
-      }
+}
 
-      function focusNode(nodeId) {
-        network.focus(nodeId, { scale: 1.4, animation: true });
-        network.selectNodes([nodeId]);
-        showInfo(nodeId);
-      }
+function focusNode(nodeId) {
+  network.focus(nodeId, { scale: 1.4, animation: true });
+  network.selectNodes([nodeId]);
+  showInfo(nodeId);
+}
 
-      // Track hovered node — hover detection is more reliable than click params
-      let hoveredNodeId = null;
-      network.on("hoverNode", (params) => {
-        hoveredNodeId = params.node;
-        container.style.cursor = "pointer";
-      });
-      network.on("blurNode", () => {
-        hoveredNodeId = null;
-        container.style.cursor = "default";
-      });
-      container.addEventListener("click", () => {
-        if (hoveredNodeId !== null) {
-          showInfo(hoveredNodeId);
-          network.selectNodes([hoveredNodeId]);
-        }
-      });
-      network.on("click", (params) => {
-        if (params.nodes.length > 0) {
-          showInfo(params.nodes[0]);
-        } else if (hoveredNodeId === null) {
-          document.getElementById("info-content").innerHTML =
-            '<span class="empty">Click a node to inspect it</span>';
-        }
-      });
+// Track hovered node — hover detection is more reliable than click params
+let hoveredNodeId = null;
+network.on('hoverNode', params => {
+  hoveredNodeId = params.node;
+  container.style.cursor = 'pointer';
+});
+network.on('blurNode', () => {
+  hoveredNodeId = null;
+  container.style.cursor = 'default';
+});
+container.addEventListener('click', () => {
+  if (hoveredNodeId !== null) {
+    showInfo(hoveredNodeId);
+    network.selectNodes([hoveredNodeId]);
+  }
+});
+network.on('click', params => {
+  if (params.nodes.length > 0) {
+    showInfo(params.nodes[0]);
+  } else if (hoveredNodeId === null) {
+    document.getElementById('info-content').innerHTML = '<span class="empty">Click a node to inspect it</span>';
+  }
+});
 
-      const searchInput = document.getElementById("search");
-      const searchResults = document.getElementById("search-results");
-      searchInput.addEventListener("input", () => {
-        const q = searchInput.value.toLowerCase().trim();
-        searchResults.innerHTML = "";
-        if (!q) {
-          searchResults.style.display = "none";
-          return;
-        }
-        const matches = RAW_NODES.filter((n) =>
-          n.label.toLowerCase().includes(q),
-        ).slice(0, 20);
-        if (!matches.length) {
-          searchResults.style.display = "none";
-          return;
-        }
-        searchResults.style.display = "block";
-        matches.forEach((n) => {
-          const el = document.createElement("div");
-          el.className = "search-item";
-          el.textContent = n.label;
-          el.style.borderLeft = `3px solid ${n.color.background}`;
-          el.style.paddingLeft = "8px";
-          el.onclick = () => {
-            network.focus(n.id, { scale: 1.5, animation: true });
-            network.selectNodes([n.id]);
-            showInfo(n.id);
-            searchResults.style.display = "none";
-            searchInput.value = "";
-          };
-          searchResults.appendChild(el);
-        });
-      });
-      document.addEventListener("click", (e) => {
-        if (!searchResults.contains(e.target) && e.target !== searchInput)
-          searchResults.style.display = "none";
-      });
+const searchInput = document.getElementById('search');
+const searchResults = document.getElementById('search-results');
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.toLowerCase().trim();
+  searchResults.innerHTML = '';
+  if (!q) { searchResults.style.display = 'none'; return; }
+  const matches = RAW_NODES.filter(n => n.label.toLowerCase().includes(q)).slice(0, 20);
+  if (!matches.length) { searchResults.style.display = 'none'; return; }
+  searchResults.style.display = 'block';
+  matches.forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'search-item';
+    el.textContent = n.label;
+    el.style.borderLeft = `3px solid ${n.color.background}`;
+    el.style.paddingLeft = '8px';
+    el.onclick = () => {
+      network.focus(n.id, { scale: 1.5, animation: true });
+      network.selectNodes([n.id]);
+      showInfo(n.id);
+      searchResults.style.display = 'none';
+      searchInput.value = '';
+    };
+    searchResults.appendChild(el);
+  });
+});
+document.addEventListener('click', e => {
+  if (!searchResults.contains(e.target) && e.target !== searchInput)
+    searchResults.style.display = 'none';
+});
 
-      const hiddenCommunities = new Set();
+const hiddenCommunities = new Set();
 
-      const selectAllCb = document.getElementById("select-all-cb");
+const selectAllCb = document.getElementById('select-all-cb');
 
-      function updateSelectAllState() {
-        const total = LEGEND.length;
-        const hidden = hiddenCommunities.size;
-        selectAllCb.checked = hidden === 0;
-        selectAllCb.indeterminate = hidden > 0 && hidden < total;
-      }
+function updateSelectAllState() {
+  const total = LEGEND.length;
+  const hidden = hiddenCommunities.size;
+  selectAllCb.checked = hidden === 0;
+  selectAllCb.indeterminate = hidden > 0 && hidden < total;
+}
 
-      function toggleAllCommunities(hide) {
-        document.querySelectorAll(".legend-item").forEach((item) => {
-          hide ? item.classList.add("dimmed") : item.classList.remove("dimmed");
-        });
-        document.querySelectorAll(".legend-cb").forEach((cb) => {
-          cb.checked = !hide;
-        });
-        LEGEND.forEach((c) => {
-          if (hide) hiddenCommunities.add(c.cid);
-          else hiddenCommunities.delete(c.cid);
-        });
-        const updates = RAW_NODES.map((n) => ({ id: n.id, hidden: hide }));
-        nodesDS.update(updates);
-        updateSelectAllState();
-      }
+function toggleAllCommunities(hide) {
+  document.querySelectorAll('.legend-item').forEach(item => {
+    hide ? item.classList.add('dimmed') : item.classList.remove('dimmed');
+  });
+  document.querySelectorAll('.legend-cb').forEach(cb => {
+    cb.checked = !hide;
+  });
+  LEGEND.forEach(c => {
+    if (hide) hiddenCommunities.add(c.cid); else hiddenCommunities.delete(c.cid);
+  });
+  const updates = RAW_NODES.map(n => ({ id: n.id, hidden: hide }));
+  nodesDS.update(updates);
+  updateSelectAllState();
+}
 
-      const legendEl = document.getElementById("legend");
-      LEGEND.forEach((c) => {
-        const item = document.createElement("div");
-        item.className = "legend-item";
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.className = "legend-cb";
-        cb.checked = true;
-        cb.addEventListener("change", (e) => {
-          e.stopPropagation();
-          if (cb.checked) {
-            hiddenCommunities.delete(c.cid);
-            item.classList.remove("dimmed");
-          } else {
-            hiddenCommunities.add(c.cid);
-            item.classList.add("dimmed");
-          }
-          const updates = RAW_NODES.filter((n) => n.community === c.cid).map(
-            (n) => ({ id: n.id, hidden: !cb.checked }),
-          );
-          nodesDS.update(updates);
-          updateSelectAllState();
-        });
-        item.innerHTML = `<div class="legend-dot" style="background:${c.color}"></div>
+const legendEl = document.getElementById('legend');
+LEGEND.forEach(c => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  const cb = document.createElement('input');
+  cb.type = 'checkbox';
+  cb.className = 'legend-cb';
+  cb.checked = true;
+  cb.addEventListener('change', (e) => {
+    e.stopPropagation();
+    if (cb.checked) {
+      hiddenCommunities.delete(c.cid);
+      item.classList.remove('dimmed');
+    } else {
+      hiddenCommunities.add(c.cid);
+      item.classList.add('dimmed');
+    }
+    const updates = RAW_NODES
+      .filter(n => n.community === c.cid)
+      .map(n => ({ id: n.id, hidden: !cb.checked }));
+    nodesDS.update(updates);
+    updateSelectAllState();
+  });
+  item.innerHTML = `<div class="legend-dot" style="background:${c.color}"></div>
     <span class="legend-label">${c.label}</span>
     <span class="legend-count">${c.count}</span>`;
-        item.prepend(cb);
-        item.onclick = (e) => {
-          if (e.target === cb) return;
-          cb.checked = !cb.checked;
-          cb.dispatchEvent(new Event("change"));
-        };
-        legendEl.appendChild(item);
-      });
-    </script>
-    <script>
-      // Render hyperedges as shaded regions
-      const hyperedges = [];
-      // afterDrawing passes ctx already transformed to network coordinate space.
-      // Draw node positions raw — no manual pan/zoom/DPR math needed.
-      network.on("afterDrawing", function (ctx) {
-        hyperedges.forEach((h) => {
-          const positions = h.nodes
-            .map((nid) => network.getPositions([nid])[nid])
-            .filter((p) => p !== undefined);
-          if (positions.length < 2) return;
-          ctx.save();
-          ctx.globalAlpha = 0.12;
-          ctx.fillStyle = "#6366f1";
-          ctx.strokeStyle = "#6366f1";
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          // Centroid and expanded hull in network coordinates
-          const cx = positions.reduce((s, p) => s + p.x, 0) / positions.length;
-          const cy = positions.reduce((s, p) => s + p.y, 0) / positions.length;
-          const expanded = positions.map((p) => ({
+  item.prepend(cb);
+  item.onclick = (e) => {
+    if (e.target === cb) return;
+    cb.checked = !cb.checked;
+    cb.dispatchEvent(new Event('change'));
+  };
+  legendEl.appendChild(item);
+});
+</script>
+<script>
+// Render hyperedges as shaded regions
+const hyperedges = [];
+// afterDrawing passes ctx already transformed to network coordinate space.
+// Draw node positions raw — no manual pan/zoom/DPR math needed.
+network.on('afterDrawing', function(ctx) {
+    hyperedges.forEach(h => {
+        const positions = h.nodes
+            .map(nid => network.getPositions([nid])[nid])
+            .filter(p => p !== undefined);
+        if (positions.length < 2) return;
+        ctx.save();
+        ctx.globalAlpha = 0.12;
+        ctx.fillStyle = '#6366f1';
+        ctx.strokeStyle = '#6366f1';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        // Centroid and expanded hull in network coordinates
+        const cx = positions.reduce((s, p) => s + p.x, 0) / positions.length;
+        const cy = positions.reduce((s, p) => s + p.y, 0) / positions.length;
+        const expanded = positions.map(p => ({
             x: cx + (p.x - cx) * 1.15,
-            y: cy + (p.y - cy) * 1.15,
-          }));
-          ctx.moveTo(expanded[0].x, expanded[0].y);
-          expanded.slice(1).forEach((p) => ctx.lineTo(p.x, p.y));
-          ctx.closePath();
-          ctx.fill();
-          ctx.globalAlpha = 0.4;
-          ctx.stroke();
-          // Label
-          ctx.globalAlpha = 0.8;
-          ctx.fillStyle = "#4f46e5";
-          ctx.font = "bold 11px sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText(h.label, cx, cy - 5);
-          ctx.restore();
-        });
-      });
-    </script>
-  </body>
+            y: cy + (p.y - cy) * 1.15
+        }));
+        ctx.moveTo(expanded[0].x, expanded[0].y);
+        expanded.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 0.4;
+        ctx.stroke();
+        // Label
+        ctx.globalAlpha = 0.8;
+        ctx.fillStyle = '#4f46e5';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(h.label, cx, cy - 5);
+        ctx.restore();
+    });
+});
+</script>
+</body>
 </html>

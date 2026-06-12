@@ -2,64 +2,7 @@
 
 **A project-centric AI operating system.**
 
-Nexus unifies multiple AI models, shared memory, and development tools into a single workspace — replacing the browser-switching, account-juggling, context-losing workflow that comes with using Claude, Gemini, and ChatGPT separately.
-
-Not a chatbot. An orchestration layer.
-
----
-
-## The Problem
-
-Modern AI-assisted development means constantly context-switching:
-
-- 3 different AI providers, each in a separate browser tab
-- No shared memory between sessions or models
-- Responses from Claude, Gemini, and ChatGPT live in separate silos
-- Every new project starts from scratch
-
-Nexus fixes this by giving every project a persistent workspace where all models share the same context.
-
----
-
-## How It Works
-
-```
-You ask one question
-        ↓
-Nexus routes it to Claude + Gemini (+ others) in parallel
-        ↓
-Responses appear side-by-side
-        ↓
-Everything is saved to the project's memory
-        ↓
-Next session picks up exactly where you left off
-```
-
----
-
-## Features
-
-### ✅ MVP (v0.1)
-
-- **Project workspaces** — create and switch between projects; all history is project-scoped
-- **Multi-model chat** — Claude and Gemini in one interface
-- **Parallel fan-out** — one prompt, both models respond simultaneously, displayed side-by-side
-- **Persistent history** — every query and response saved to PostgreSQL
-- **Semantic memory** — ChromaDB RAG over project notes and past outputs
-
-### 🔜 v0.5
-
-- Task-aware router (auto-selects best model per task type)
-- GitHub integration
-- Knowledge graph
-- Study Mode (syllabus → HTML study portal)
-
-### 🔜 v1.0
-
-- Full agent mode with MCP tool support
-- Aider integration for multi-file code edits
-- Local Ollama model support
-- Shareable workspaces
+One prompt → multiple AI models in parallel → centralized memory. Replaces browser-tab juggling with a single local workspace.
 
 ---
 
@@ -67,71 +10,49 @@ Next session picks up exactly where you left off
 
 ```
 React (Vite)          localhost:5173
-      │
-      │  REST / WebSocket
+      │ REST
       ▼
 FastAPI               localhost:8000
       │
-      ├── PostgreSQL   (project metadata, message history)
-      ├── ChromaDB     (vector memory, semantic search)
+      ├── SQLite       nexus.db
+      │   ├── projects  (workspace metadata, Google account index)
+      │   ├── history   (all prompts + responses)
+      │   └── FTS5      (project notes — auto-injected as context)
+      │
       └── Model Router
-            ├── Claude API
-            ├── Gemini API
-            ├── OpenAI API
-            └── Ollama (local)
+            ├── Groq (Llama 3.3 70B)
+            └── Gemini 1.5 Flash
 ```
 
-## Local Setup
-
-### Backend
-
-1. `cd backend`
-2. `python -m pip install -r requirements.txt`
-3. Copy `backend/.env.example` to `backend/.env` and fill in `ANTHROPIC_API_KEY` and `GEMINI_API_KEY`
-4. `uvicorn main:app --reload --host 0.0.0.0 --port 8000`
-
-### Frontend
-
-1. `cd frontend`
-2. `npm install`
-3. `npm run dev`
-
-The frontend sends prompts to `http://localhost:8000/query` and displays Claude and Gemini responses side-by-side.
+No PostgreSQL. No ChromaDB. No OAuth token storage. Single `nexus.db` file.
 
 ---
 
-## Stack
+## Features (v0.2)
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 (Vite) |
-| Backend | FastAPI + asyncio |
-| Database | PostgreSQL |
-| Vector DB | ChromaDB |
-| HTTP client | httpx (async) |
-| Config | python-dotenv |
+- **Project workspaces** — create/switch projects; all history is project-scoped
+- **Multi-model parallel fan-out** — Groq + Gemini respond simultaneously, displayed side-by-side
+- **Persistent history** — every query auto-saved to SQLite; loads on project switch
+- **FTS5 context injection** — save notes to a project; they're silently prepended as context when relevant
+- **Google account routing** — each project maps to a Google account index (`/u/0`, `/u/1`); sidebar links open Gmail/Drive/Calendar for the right account directly
+- **Multi-key rotation** — comma-separated key pools per model; auto-retries on 429/401
 
 ---
 
-## Getting Started
-
-### Prerequisites
-
-- Python 3.10+
-- Node.js 18+
-- PostgreSQL running locally
-- API keys for Claude and/or Gemini
+## Setup
 
 ### Backend
 
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate       # Windows: venv\Scripts\activate
+venv\Scripts\activate          # Windows
+# source venv/bin/activate     # Linux/Mac
+
 pip install -r requirements.txt
 
 cp .env.example .env
-# Add your API keys to .env
+# Edit .env — add your GROQ_API_KEYS and GEMINI_API_KEYS
 
 uvicorn main:app --reload
 ```
@@ -146,36 +67,50 @@ npm run dev
 
 Open `http://localhost:5173`.
 
-### Environment Variables
+### .env format
 
 ```env
-ANTHROPIC_API_KEY=sk-ant-...
-GEMINI_API_KEY=AIza...
-DATABASE_URL=postgresql://user:password@localhost/nexus
+GROQ_API_KEYS=gsk_key1,gsk_key2
+GEMINI_API_KEYS=AIza_key1,AIza_key2
 ```
 
 ---
 
-## Project Structure
+## API
+
+| Method | Route | Purpose |
+|---|---|---|
+| GET | `/models` | Available model IDs |
+| GET | `/projects` | All projects |
+| POST | `/projects` | Create project |
+| GET | `/projects/{id}/messages` | Message history |
+| POST | `/query` | Fan-out prompt |
+| POST | `/notes` | Add project note (FTS5-indexed) |
+
+---
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 18 (Vite) |
+| Backend | FastAPI + asyncio |
+| Storage | SQLite (built-in) + FTS5 |
+| HTTP client | httpx (async) |
+| Config | python-dotenv |
+
+---
+
+## Google Account Routing
+
+No OAuth. Each project stores a `g_index` (0, 1, 2…) matching your Chrome Google account order. The sidebar generates direct links:
 
 ```
-nexus/
-├── backend/
-│   ├── main.py          # FastAPI app, routes, model adapters
-│   ├── models.py        # SQLAlchemy models
-│   ├── memory.py        # ChromaDB integration
-│   ├── requirements.txt
-│   └── .env.example
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   └── components/
-│   └── package.json
-├── docs/
-│   └── architecture.md
-├── README.md
-└── LICENSE
+g_index = 0 → https://mail.google.com/mail/u/0/
+g_index = 1 → https://mail.google.com/mail/u/1/
 ```
+
+Set `g_index` when creating a project. Your browser's existing sessions handle authentication.
 
 ---
 
@@ -183,15 +118,9 @@ nexus/
 
 | Version | Focus |
 |---|---|
-| v0.1 | Parallel fan-out + persistent history + ChromaDB RAG |
-| v0.5 | Task router + GitHub + knowledge graph + Study Mode |
-| v1.0 | Agent mode + MCP tools + Ollama + shareable workspaces |
-
----
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+| v0.2 | Current — SQLite + FTS5 + Google routing |
+| v0.5 | Notes UI · project system prompt editor · cost/token tracker |
+| v1.0 | Agent mode · Ollama · task-aware routing |
 
 ---
 

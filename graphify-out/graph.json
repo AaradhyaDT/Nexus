@@ -4,6 +4,960 @@
   "graph": {},
   "nodes": [
     {
+      "label": "main.py",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L1",
+      "id": "backend_main",
+      "community": 1,
+      "norm_label": "main.py"
+    },
+    {
+      "label": "get_db()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L20",
+      "id": "backend_main_get_db",
+      "community": 1,
+      "norm_label": "get_db()"
+    },
+    {
+      "label": "init_db()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L32",
+      "id": "backend_main_init_db",
+      "community": 1,
+      "norm_label": "init_db()"
+    },
+    {
+      "label": "startup()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L67",
+      "id": "backend_main_startup",
+      "community": 1,
+      "norm_label": "startup()"
+    },
+    {
+      "label": "QueryRequest",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L71",
+      "id": "backend_main_queryrequest",
+      "community": 1,
+      "norm_label": "queryrequest"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "basemodel",
+      "community": 1,
+      "norm_label": "basemodel"
+    },
+    {
+      "label": "ProjectCreate",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L76",
+      "id": "backend_main_projectcreate",
+      "community": 1,
+      "norm_label": "projectcreate"
+    },
+    {
+      "label": "NoteCreate",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L82",
+      "id": "backend_main_notecreate",
+      "community": 1,
+      "norm_label": "notecreate"
+    },
+    {
+      "label": "with_rotation()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L88",
+      "id": "backend_main_with_rotation",
+      "community": 1,
+      "norm_label": "with_rotation()"
+    },
+    {
+      "label": "str",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L88",
+      "id": "str",
+      "community": 1,
+      "norm_label": "str"
+    },
+    {
+      "label": "call_groq()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L104",
+      "id": "backend_main_call_groq",
+      "community": 1,
+      "norm_label": "call_groq()"
+    },
+    {
+      "label": "AsyncClient",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L104",
+      "id": "asyncclient",
+      "community": 1,
+      "norm_label": "asyncclient"
+    },
+    {
+      "label": "call_gemini()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L122",
+      "id": "backend_main_call_gemini",
+      "community": 1,
+      "norm_label": "call_gemini()"
+    },
+    {
+      "label": "fts_context()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L140",
+      "id": "backend_main_fts_context",
+      "community": 1,
+      "norm_label": "fts_context()"
+    },
+    {
+      "label": "int",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L140",
+      "id": "int",
+      "community": 1,
+      "norm_label": "int"
+    },
+    {
+      "label": "list_models()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L161",
+      "id": "backend_main_list_models",
+      "community": 1,
+      "norm_label": "list_models()"
+    },
+    {
+      "label": "list_projects()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L165",
+      "id": "backend_main_list_projects",
+      "community": 1,
+      "norm_label": "list_projects()"
+    },
+    {
+      "label": "create_project()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L173",
+      "id": "backend_main_create_project",
+      "community": 1,
+      "norm_label": "create_project()"
+    },
+    {
+      "label": "get_messages()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L183",
+      "id": "backend_main_get_messages",
+      "community": 1,
+      "norm_label": "get_messages()"
+    },
+    {
+      "label": "handle_query()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L199",
+      "id": "backend_main_handle_query",
+      "community": 1,
+      "norm_label": "handle_query()"
+    },
+    {
+      "label": "add_note()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L226",
+      "id": "backend_main_add_note",
+      "community": 1,
+      "norm_label": "add_note()"
+    },
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L1",
+      "id": "frontend_package",
+      "community": 4,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L2",
+      "id": "frontend_package_name",
+      "community": 4,
+      "norm_label": "name"
+    },
+    {
+      "label": "private",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L3",
+      "id": "frontend_package_private",
+      "community": 4,
+      "norm_label": "private"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L4",
+      "id": "frontend_package_version",
+      "community": 4,
+      "norm_label": "version"
+    },
+    {
+      "label": "type",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L5",
+      "id": "frontend_package_type",
+      "community": 4,
+      "norm_label": "type"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L6",
+      "id": "frontend_package_scripts",
+      "community": 4,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L7",
+      "id": "frontend_package_scripts_dev",
+      "community": 4,
+      "norm_label": "dev"
+    },
+    {
+      "label": "build",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L8",
+      "id": "frontend_package_scripts_build",
+      "community": 4,
+      "norm_label": "build"
+    },
+    {
+      "label": "preview",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L9",
+      "id": "frontend_package_scripts_preview",
+      "community": 4,
+      "norm_label": "preview"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L11",
+      "id": "frontend_package_dependencies",
+      "community": 4,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "react",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L12",
+      "id": "frontend_package_dependencies_react",
+      "community": 4,
+      "norm_label": "react"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L13",
+      "id": "frontend_package_dependencies_react_dom",
+      "community": 4,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L15",
+      "id": "frontend_package_devdependencies",
+      "community": 4,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "@vitejs/plugin-react",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L16",
+      "id": "frontend_package_devdependencies_vitejs_plugin_react",
+      "community": 4,
+      "norm_label": "@vitejs/plugin-react"
+    },
+    {
+      "label": "vite",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L17",
+      "id": "frontend_package_devdependencies_vite",
+      "community": 4,
+      "norm_label": "vite"
+    },
+    {
+      "label": "App.jsx",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/src/App.jsx",
+      "source_location": "L1",
+      "id": "src_app",
+      "community": 8,
+      "norm_label": "app.jsx"
+    },
+    {
+      "label": "GOOGLE",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/src/App.jsx",
+      "source_location": "L5",
+      "id": "src_app_google",
+      "community": 8,
+      "norm_label": "google"
+    },
+    {
+      "label": "MODEL_LABEL",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/src/App.jsx",
+      "source_location": "L11",
+      "id": "src_app_model_label",
+      "community": 8,
+      "norm_label": "model_label"
+    },
+    {
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/src/App.jsx",
+      "source_location": "L16",
+      "id": "src_app_app",
+      "community": 8,
+      "norm_label": "app()"
+    },
+    {
+      "label": "main.jsx",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/src/main.jsx",
+      "source_location": "L1",
+      "id": "src_main",
+      "community": 8,
+      "norm_label": "main.jsx"
+    },
+    {
+      "label": "vite.config.js",
+      "file_type": "code",
+      "source_file": "Nexus_V0/frontend/vite.config.js",
+      "source_location": "L1",
+      "id": "frontend_vite_config",
+      "community": 9,
+      "norm_label": "vite.config.js"
+    },
+    {
+      "label": "Claude_Nexus_Session.md",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L1",
+      "id": "claude_nexus_session",
+      "community": 2,
+      "norm_label": "claude_nexus_session.md"
+    },
+    {
+      "label": "Claude Session \u2014 Nexus AI Workflow Hub",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L1",
+      "id": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "community": 2,
+      "norm_label": "claude session \u2014 nexus ai workflow hub"
+    },
+    {
+      "label": "Session Summary",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L7",
+      "id": "claude_nexus_session_session_summary",
+      "community": 2,
+      "norm_label": "session summary"
+    },
+    {
+      "label": "Project Vision",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L18",
+      "id": "claude_nexus_session_project_vision",
+      "community": 2,
+      "norm_label": "project vision"
+    },
+    {
+      "label": "Architecture Decision",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L29",
+      "id": "claude_nexus_session_architecture_decision",
+      "community": 2,
+      "norm_label": "architecture decision"
+    },
+    {
+      "label": "Orchestration Patterns",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L56",
+      "id": "claude_nexus_session_orchestration_patterns",
+      "community": 2,
+      "norm_label": "orchestration patterns"
+    },
+    {
+      "label": "MVP Scope (8 weeks, nightly sessions)",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L76",
+      "id": "claude_nexus_session_mvp_scope_8_weeks_nightly_sessions",
+      "community": 2,
+      "norm_label": "mvp scope (8 weeks, nightly sessions)"
+    },
+    {
+      "label": "Day 1 Implementation (Tonight \u2014 Done \u2705 / In Progress)",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L100",
+      "id": "claude_nexus_session_day_1_implementation_tonight_done_in_progress",
+      "community": 2,
+      "norm_label": "day 1 implementation (tonight \u2014 done \u2705 / in progress)"
+    },
+    {
+      "label": "Repo structure",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L102",
+      "id": "claude_nexus_session_repo_structure",
+      "community": 2,
+      "norm_label": "repo structure"
+    },
+    {
+      "label": "Backend skeleton (`backend/main.py`)",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L116",
+      "id": "claude_nexus_session_backend_skeleton_backend_main_py",
+      "community": 2,
+      "norm_label": "backend skeleton (`backend/main.py`)"
+    },
+    {
+      "label": "Frontend skeleton (`frontend/src/App.jsx`)",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L163",
+      "id": "claude_nexus_session_frontend_skeleton_frontend_src_app_jsx",
+      "community": 2,
+      "norm_label": "frontend skeleton (`frontend/src/app.jsx`)"
+    },
+    {
+      "label": "Day 1 done state",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L204",
+      "id": "claude_nexus_session_day_1_done_state",
+      "community": 2,
+      "norm_label": "day 1 done state"
+    },
+    {
+      "label": "Next Session (Day 2) \u2014 Postgres Layer",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L211",
+      "id": "claude_nexus_session_next_session_day_2_postgres_layer",
+      "community": 2,
+      "norm_label": "next session (day 2) \u2014 postgres layer"
+    },
+    {
+      "label": "Risks to Watch",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L220",
+      "id": "claude_nexus_session_risks_to_watch",
+      "community": 2,
+      "norm_label": "risks to watch"
+    },
+    {
+      "label": "Portfolio Angle",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L231",
+      "id": "claude_nexus_session_portfolio_angle",
+      "community": 2,
+      "norm_label": "portfolio angle"
+    },
+    {
+      "label": "Strategic Note",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L243",
+      "id": "claude_nexus_session_strategic_note",
+      "community": 2,
+      "norm_label": "strategic note"
+    },
+    {
+      "label": "Context Links",
+      "file_type": "document",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L249",
+      "id": "claude_nexus_session_context_links",
+      "community": 2,
+      "norm_label": "context links"
+    },
+    {
+      "label": "Nexus_Day1_TaskPlan.md",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L1",
+      "id": "nexus_day1_taskplan",
+      "community": 3,
+      "norm_label": "nexus_day1_taskplan.md"
+    },
+    {
+      "label": "Nexus Day 1 \u2014 Task Plan",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L1",
+      "id": "nexus_day1_taskplan_nexus_day_1_task_plan",
+      "community": 3,
+      "norm_label": "nexus day 1 \u2014 task plan"
+    },
+    {
+      "label": "Goal",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L6",
+      "id": "nexus_day1_taskplan_goal",
+      "community": 3,
+      "norm_label": "goal"
+    },
+    {
+      "label": "Files",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L11",
+      "id": "nexus_day1_taskplan_files",
+      "community": 3,
+      "norm_label": "files"
+    },
+    {
+      "label": "Tasks",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L29",
+      "id": "nexus_day1_taskplan_tasks",
+      "community": 3,
+      "norm_label": "tasks"
+    },
+    {
+      "label": "T1 \u2014 Repo scaffold \u2705",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L31",
+      "id": "nexus_day1_taskplan_t1_repo_scaffold",
+      "community": 3,
+      "norm_label": "t1 \u2014 repo scaffold \u2705"
+    },
+    {
+      "label": "T2 \u2014 Backend skeleton \u2705",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L36",
+      "id": "nexus_day1_taskplan_t2_backend_skeleton",
+      "community": 3,
+      "norm_label": "t2 \u2014 backend skeleton \u2705"
+    },
+    {
+      "label": "T3 \u2014 Model adapters \u2705 (with fixes)",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L42",
+      "id": "nexus_day1_taskplan_t3_model_adapters_with_fixes",
+      "community": 3,
+      "norm_label": "t3 \u2014 model adapters \u2705 (with fixes)"
+    },
+    {
+      "label": "T4 \u2014 Multi-key rotation \u2705 (added Day 1 close)",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L51",
+      "id": "nexus_day1_taskplan_t4_multi_key_rotation_added_day_1_close",
+      "community": 3,
+      "norm_label": "t4 \u2014 multi-key rotation \u2705 (added day 1 close)"
+    },
+    {
+      "label": "T5 \u2014 `/query` route \u2705",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L59",
+      "id": "nexus_day1_taskplan_t5_query_route",
+      "community": 3,
+      "norm_label": "t5 \u2014 `/query` route \u2705"
+    },
+    {
+      "label": "T6 \u2014 Frontend UI \u2705 (with fixes)",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L64",
+      "id": "nexus_day1_taskplan_t6_frontend_ui_with_fixes",
+      "community": 3,
+      "norm_label": "t6 \u2014 frontend ui \u2705 (with fixes)"
+    },
+    {
+      "label": "T7 \u2014 `.env` security \u2705",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L71",
+      "id": "nexus_day1_taskplan_t7_env_security",
+      "community": 3,
+      "norm_label": "t7 \u2014 `.env` security \u2705"
+    },
+    {
+      "label": "T8 \u2014 Day 1 verification",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L76",
+      "id": "nexus_day1_taskplan_t8_day_1_verification",
+      "community": 3,
+      "norm_label": "t8 \u2014 day 1 verification"
+    },
+    {
+      "label": "Done State",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L85",
+      "id": "nexus_day1_taskplan_done_state",
+      "community": 3,
+      "norm_label": "done state"
+    },
+    {
+      "label": "Known Issues Resolved",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L90",
+      "id": "nexus_day1_taskplan_known_issues_resolved",
+      "community": 3,
+      "norm_label": "known issues resolved"
+    },
+    {
+      "label": "Day 2 \u2192",
+      "file_type": "document",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L102",
+      "id": "nexus_day1_taskplan_day_2",
+      "community": 3,
+      "norm_label": "day 2 \u2192"
+    },
+    {
+      "label": "Nexus_Day2_TaskPlan.md",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L1",
+      "id": "nexus_day2_taskplan",
+      "community": 7,
+      "norm_label": "nexus_day2_taskplan.md"
+    },
+    {
+      "label": "Nexus Day 2 \u2014 Complete Task Plan",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L1",
+      "id": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "community": 7,
+      "norm_label": "nexus day 2 \u2014 complete task plan"
+    },
+    {
+      "label": "Scope",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L6",
+      "id": "nexus_day2_taskplan_scope",
+      "community": 7,
+      "norm_label": "scope"
+    },
+    {
+      "label": "Files Changed",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L15",
+      "id": "nexus_day2_taskplan_files_changed",
+      "community": 7,
+      "norm_label": "files changed"
+    },
+    {
+      "label": "DB Schema",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L27",
+      "id": "nexus_day2_taskplan_db_schema",
+      "community": 7,
+      "norm_label": "db schema"
+    },
+    {
+      "label": "API Routes",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L50",
+      "id": "nexus_day2_taskplan_api_routes",
+      "community": 7,
+      "norm_label": "api routes"
+    },
+    {
+      "label": "Task Sequence",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L62",
+      "id": "nexus_day2_taskplan_task_sequence",
+      "community": 6,
+      "norm_label": "task sequence"
+    },
+    {
+      "label": "T1 \u2014 `requirements.txt`",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L64",
+      "id": "nexus_day2_taskplan_t1_requirements_txt",
+      "community": 6,
+      "norm_label": "t1 \u2014 `requirements.txt`"
+    },
+    {
+      "label": "T2 \u2014 `.env.example`",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L71",
+      "id": "nexus_day2_taskplan_t2_env_example",
+      "community": 6,
+      "norm_label": "t2 \u2014 `.env.example`"
+    },
+    {
+      "label": "T3 \u2014 `main.py` \u2014 Model Adapters",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L80",
+      "id": "nexus_day2_taskplan_t3_main_py_model_adapters",
+      "community": 6,
+      "norm_label": "t3 \u2014 `main.py` \u2014 model adapters"
+    },
+    {
+      "label": "T4 \u2014 `main.py` \u2014 DB Init",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L107",
+      "id": "nexus_day2_taskplan_t4_main_py_db_init",
+      "community": 6,
+      "norm_label": "t4 \u2014 `main.py` \u2014 db init"
+    },
+    {
+      "label": "T5 \u2014 `main.py` \u2014 Routes",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L113",
+      "id": "nexus_day2_taskplan_t5_main_py_routes",
+      "community": 6,
+      "norm_label": "t5 \u2014 `main.py` \u2014 routes"
+    },
+    {
+      "label": "T6 \u2014 `App.jsx` \u2014 State",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L120",
+      "id": "nexus_day2_taskplan_t6_app_jsx_state",
+      "community": 6,
+      "norm_label": "t6 \u2014 `app.jsx` \u2014 state"
+    },
+    {
+      "label": "T7 \u2014 `App.jsx` \u2014 Project Sidebar",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L130",
+      "id": "nexus_day2_taskplan_t7_app_jsx_project_sidebar",
+      "community": 6,
+      "norm_label": "t7 \u2014 `app.jsx` \u2014 project sidebar"
+    },
+    {
+      "label": "T8 \u2014 `App.jsx` \u2014 Model Selector",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L139",
+      "id": "nexus_day2_taskplan_t8_app_jsx_model_selector",
+      "community": 6,
+      "norm_label": "t8 \u2014 `app.jsx` \u2014 model selector"
+    },
+    {
+      "label": "T9 \u2014 `App.jsx` \u2014 Results + History",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L145",
+      "id": "nexus_day2_taskplan_t9_app_jsx_results_history",
+      "community": 6,
+      "norm_label": "t9 \u2014 `app.jsx` \u2014 results + history"
+    },
+    {
+      "label": "T10 \u2014 `style.css` \u2014 Layout",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L152",
+      "id": "nexus_day2_taskplan_t10_style_css_layout",
+      "community": 6,
+      "norm_label": "t10 \u2014 `style.css` \u2014 layout"
+    },
+    {
+      "label": "Done State (end of Day 2)",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L162",
+      "id": "nexus_day2_taskplan_done_state_end_of_day_2",
+      "community": 7,
+      "norm_label": "done state (end of day 2)"
+    },
+    {
+      "label": "Day 3 Preview",
+      "file_type": "document",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L174",
+      "id": "nexus_day2_taskplan_day_3_preview",
+      "community": 7,
+      "norm_label": "day 3 preview"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "readme",
+      "community": 5,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "Nexus",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "readme_nexus",
+      "community": 5,
+      "norm_label": "nexus"
+    },
+    {
+      "label": "Architecture",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L9",
+      "id": "readme_architecture",
+      "community": 5,
+      "norm_label": "architecture"
+    },
+    {
+      "label": "Features (v0.2)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L31",
+      "id": "readme_features_v0_2",
+      "community": 5,
+      "norm_label": "features (v0.2)"
+    },
+    {
+      "label": "Setup",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L42",
+      "id": "readme_setup",
+      "community": 5,
+      "norm_label": "setup"
+    },
+    {
+      "label": "Backend",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "id": "readme_backend",
+      "community": 5,
+      "norm_label": "backend"
+    },
+    {
+      "label": "Frontend",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L60",
+      "id": "readme_frontend",
+      "community": 5,
+      "norm_label": "frontend"
+    },
+    {
+      "label": ".env format",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L70",
+      "id": "readme_env_format",
+      "community": 5,
+      "norm_label": ".env format"
+    },
+    {
+      "label": "API",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L79",
+      "id": "readme_api",
+      "community": 5,
+      "norm_label": "api"
+    },
+    {
+      "label": "Stack",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L92",
+      "id": "readme_stack",
+      "community": 5,
+      "norm_label": "stack"
+    },
+    {
+      "label": "Google Account Routing",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L104",
+      "id": "readme_google_account_routing",
+      "community": 5,
+      "norm_label": "google account routing"
+    },
+    {
+      "label": "Roadmap",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L117",
+      "id": "readme_roadmap",
+      "community": 5,
+      "norm_label": "roadmap"
+    },
+    {
       "label": "Aaradhya Dev Tamrakar",
       "file_type": "concept",
       "source_file": "AARADHYA_MASTER_v89.md",
@@ -12,7 +966,7 @@
       "captured_at": "2026-06-10",
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 0,
       "norm_label": "aaradhya dev tamrakar",
       "id": "aaradhya_master_aaradhya_dev_tamrakar"
     },
@@ -38,7 +992,7 @@
       "captured_at": "2026-06-10",
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 0,
       "norm_label": "prakopnet",
       "id": "aaradhya_master_prakopnet"
     },
@@ -51,7 +1005,7 @@
       "captured_at": null,
       "author": "Fusemachines",
       "contributor": null,
-      "community": 1,
+      "community": 0,
       "norm_label": "fuse ai fellowship",
       "id": "aaradhya_master_fuse_ai_fellowship"
     },
@@ -116,12 +1070,1225 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 0,
       "norm_label": "kathmandu engineering college",
       "id": "aaradhya_master_kec"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_add_note",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_call_gemini",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_call_groq",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_create_project",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_fts_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_get_messages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_handle_query",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_init_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_list_models",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_list_projects",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_notecreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_projectcreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_queryrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_startup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "backend_main",
+      "target": "backend_main_with_rotation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L228",
+      "weight": 1.0,
+      "source": "backend_main_add_note",
+      "target": "backend_main_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "backend_main_create_project",
+      "target": "backend_main_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L146",
+      "weight": 1.0,
+      "source": "backend_main_fts_context",
+      "target": "backend_main_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L184",
+      "weight": 1.0,
+      "source": "backend_main_get_messages",
+      "target": "backend_main_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "backend_main_handle_query",
+      "target": "backend_main_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L166",
+      "weight": 1.0,
+      "source": "backend_main_list_projects",
+      "target": "backend_main_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "backend_main_startup",
+      "target": "backend_main_init_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "backend_main_handle_query",
+      "target": "backend_main_queryrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "backend_main_queryrequest",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "backend_main_notecreate",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "backend_main_projectcreate",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "backend_main_create_project",
+      "target": "backend_main_projectcreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "backend_main_add_note",
+      "target": "backend_main_notecreate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "backend_main_call_gemini",
+      "target": "backend_main_with_rotation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "backend_main_call_groq",
+      "target": "backend_main_with_rotation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "backend_main_with_rotation",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "backend_main_call_gemini",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "backend_main_call_groq",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "backend_main_fts_context",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "backend_main_call_groq",
+      "target": "asyncclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "backend_main_call_gemini",
+      "target": "asyncclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "backend_main_handle_query",
+      "target": "asyncclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "backend_main_fts_context",
+      "target": "int",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L207",
+      "weight": 1.0,
+      "source": "backend_main_handle_query",
+      "target": "backend_main_fts_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/backend/main.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "backend_main_get_messages",
+      "target": "int",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_dependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_devdependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_private",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_type",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_version",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "frontend_package_scripts",
+      "target": "frontend_package_scripts_build",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "frontend_package_scripts",
+      "target": "frontend_package_scripts_dev",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "frontend_package_scripts",
+      "target": "frontend_package_scripts_preview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_vite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_vitejs_plugin_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/src/App.jsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_app_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/src/App.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_app_google",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/src/App.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_app_model_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_V0/frontend/src/main.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "claude_nexus_session",
+      "target": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_architecture_decision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_context_links",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_day_1_implementation_tonight_done_in_progress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_mvp_scope_8_weeks_nightly_sessions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_next_session_day_2_postgres_layer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_orchestration_patterns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L231",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_portfolio_angle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_project_vision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_risks_to_watch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_session_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L243",
+      "weight": 1.0,
+      "source": "claude_nexus_session_claude_session_nexus_ai_workflow_hub",
+      "target": "claude_nexus_session_strategic_note",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "claude_nexus_session_day_1_implementation_tonight_done_in_progress",
+      "target": "claude_nexus_session_backend_skeleton_backend_main_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "source": "claude_nexus_session_day_1_implementation_tonight_done_in_progress",
+      "target": "claude_nexus_session_day_1_done_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "claude_nexus_session_day_1_implementation_tonight_done_in_progress",
+      "target": "claude_nexus_session_frontend_skeleton_frontend_src_app_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Claude_Nexus_Session.md",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "claude_nexus_session_day_1_implementation_tonight_done_in_progress",
+      "target": "claude_nexus_session_repo_structure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan",
+      "target": "nexus_day1_taskplan_nexus_day_1_task_plan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_nexus_day_1_task_plan",
+      "target": "nexus_day1_taskplan_day_2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_nexus_day_1_task_plan",
+      "target": "nexus_day1_taskplan_done_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_nexus_day_1_task_plan",
+      "target": "nexus_day1_taskplan_files",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_nexus_day_1_task_plan",
+      "target": "nexus_day1_taskplan_goal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_nexus_day_1_task_plan",
+      "target": "nexus_day1_taskplan_known_issues_resolved",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_nexus_day_1_task_plan",
+      "target": "nexus_day1_taskplan_tasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_tasks",
+      "target": "nexus_day1_taskplan_t1_repo_scaffold",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_tasks",
+      "target": "nexus_day1_taskplan_t2_backend_skeleton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_tasks",
+      "target": "nexus_day1_taskplan_t3_model_adapters_with_fixes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_tasks",
+      "target": "nexus_day1_taskplan_t4_multi_key_rotation_added_day_1_close",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_tasks",
+      "target": "nexus_day1_taskplan_t5_query_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_tasks",
+      "target": "nexus_day1_taskplan_t6_frontend_ui_with_fixes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_tasks",
+      "target": "nexus_day1_taskplan_t7_env_security",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day1_TaskPlan.md",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "nexus_day1_taskplan_tasks",
+      "target": "nexus_day1_taskplan_t8_day_1_verification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan",
+      "target": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "target": "nexus_day2_taskplan_api_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "target": "nexus_day2_taskplan_day_3_preview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "target": "nexus_day2_taskplan_db_schema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L162",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "target": "nexus_day2_taskplan_done_state_end_of_day_2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "target": "nexus_day2_taskplan_files_changed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "target": "nexus_day2_taskplan_scope",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_nexus_day_2_complete_task_plan",
+      "target": "nexus_day2_taskplan_task_sequence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L152",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t10_style_css_layout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t1_requirements_txt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t2_env_example",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t3_main_py_model_adapters",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t4_main_py_db_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t5_main_py_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t6_app_jsx_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t7_app_jsx_project_sidebar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t8_app_jsx_model_selector",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Nexus_Day2_TaskPlan.md",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "nexus_day2_taskplan_task_sequence",
+      "target": "nexus_day2_taskplan_t9_app_jsx_results_history",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "readme_nexus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "readme_nexus",
+      "target": "readme_api",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "readme_nexus",
+      "target": "readme_architecture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "readme_nexus",
+      "target": "readme_features_v0_2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "readme_nexus",
+      "target": "readme_google_account_routing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L117",
+      "weight": 1.0,
+      "source": "readme_nexus",
+      "target": "readme_roadmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "readme_nexus",
+      "target": "readme_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "readme_nexus",
+      "target": "readme_stack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "readme_setup",
+      "target": "readme_backend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "readme_setup",
+      "target": "readme_env_format",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "readme_setup",
+      "target": "readme_frontend",
+      "confidence_score": 1.0
+    },
     {
       "relation": "references",
       "confidence": "EXTRACTED",
@@ -214,5 +2381,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fc896c1717ce604402d179a58b1c370c90e89d0c"
+  "built_at_commit": "62a6a7665213a1271c85b5bdda11118cdd6e4ce4"
 }

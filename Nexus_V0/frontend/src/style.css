@@ -1,0 +1,542 @@
+/* Nexus v2 — Dark Editorial */
+
+:root {
+  --bg: #0c0c0e;
+  --surface: #141416;
+  --raised: #1a1a1e;
+  --border: #202026;
+  --dim: #45454e;
+  --sub: #888896;
+  --text: #dddde8;
+  --accent: #c8a84b;
+  --danger: #c0493c;
+  --r: 4px;
+
+  --ui: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ui);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  cursor: text;
+}
+
+/* ── Shell ─────────────────────────────────────────────────────────────────── */
+
+.nx-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+
+.nx-sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.nx-sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.nx-wordmark {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.nx-icon-btn {
+  width: 22px;
+  height: 22px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--sub);
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.nx-icon-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* create form */
+.nx-create-form {
+  padding: 10px 12px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nx-field {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  padding: 6px 10px;
+  font-size: 12.5px;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+.nx-field:focus {
+  border-color: var(--accent);
+}
+
+.nx-field::placeholder {
+  color: var(--dim);
+}
+
+.nx-create-btn {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #0c0c0e;
+  border: none;
+  border-radius: var(--r);
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: opacity 0.12s;
+}
+
+.nx-create-btn:hover {
+  opacity: 0.85;
+}
+
+/* nav */
+.nx-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.nx-proj {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  text-align: left;
+  padding: 7px 14px 7px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.nx-proj:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.nx-proj.active {
+  border-left-color: var(--accent);
+  background: rgba(200, 168, 75, 0.07);
+}
+
+.nx-proj-name {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.nx-proj.active .nx-proj-name {
+  color: var(--accent);
+}
+
+.nx-proj-email {
+  font-size: 10.5px;
+  color: var(--dim);
+}
+
+/* google links */
+.nx-glinks {
+  border-top: 1px solid var(--border);
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nx-caption {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 2px;
+}
+
+.nx-glink {
+  font-size: 11.5px;
+  color: var(--sub);
+  transition: color 0.12s;
+}
+
+.nx-glink:hover {
+  color: var(--accent);
+}
+
+/* ── Main ──────────────────────────────────────────────────────────────────── */
+
+.nx-main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  padding: 22px 26px 20px;
+  gap: 14px;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+
+.nx-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.nx-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.nx-model-row {
+  display: flex;
+  gap: 7px;
+}
+
+.nx-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 11.5px;
+  color: var(--sub);
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+  user-select: none;
+}
+
+.nx-pill input {
+  display: none;
+}
+
+.nx-pill.on {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(200, 168, 75, 0.07);
+}
+
+.nx-pill.on::before {
+  content: "●";
+  font-size: 7px;
+  opacity: 0.8;
+}
+
+/* ── Prompt ────────────────────────────────────────────────────────────────── */
+
+.nx-prompt-wrap {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nx-textarea {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  padding: 13px 15px;
+  font-size: 13.5px;
+  resize: none;
+  outline: none;
+  line-height: 1.65;
+  transition: border-color 0.12s;
+}
+
+.nx-textarea:focus {
+  border-color: var(--dim);
+}
+
+.nx-textarea::placeholder {
+  color: var(--dim);
+}
+
+.nx-prompt-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nx-hint {
+  font-size: 10.5px;
+  color: var(--dim);
+  font-family: var(--mono);
+}
+
+.nx-send {
+  background: var(--accent);
+  color: #0c0c0e;
+  border: none;
+  border-radius: var(--r);
+  padding: 7px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.12s;
+}
+
+.nx-send:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+.nx-send:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+/* loading dots */
+.nx-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.nx-dots span {
+  width: 5px;
+  height: 5px;
+  background: #0c0c0e;
+  border-radius: 50%;
+  animation: dot 0.9s ease-in-out infinite;
+}
+
+.nx-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.nx-dots span:nth-child(3) {
+  animation-delay: 0.30s;
+}
+
+@keyframes dot {
+
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.75);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* ── Error ─────────────────────────────────────────────────────────────────── */
+
+.nx-error {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--danger);
+  padding: 8px 12px;
+  border: 1px solid rgba(192, 73, 60, 0.4);
+  border-radius: var(--r);
+  background: rgba(192, 73, 60, 0.05);
+}
+
+/* ── Results ───────────────────────────────────────────────────────────────── */
+
+.nx-results {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 2), 1fr);
+  gap: 10px;
+}
+
+.nx-col {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  animation: slide-in 0.18s ease;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nx-col-head {
+  padding: 8px 13px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.nx-col-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.nx-col-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 13px;
+}
+
+/* Signature element: model outputs rendered in monospace —
+   treating responses as data to evaluate, not gospel */
+.nx-output {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── History ───────────────────────────────────────────────────────────────── */
+
+.nx-hist-section {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.nx-hist-toggle {
+  background: transparent;
+  border: none;
+  color: var(--sub);
+  font-size: 12px;
+  padding: 3px 0;
+  transition: color 0.12s;
+}
+
+.nx-hist-toggle:hover {
+  color: var(--text);
+}
+
+.nx-hist-list {
+  margin-top: 6px;
+  max-height: 170px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nx-hist-item {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 7px 10px;
+  border-radius: var(--r);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: background 0.1s;
+}
+
+.nx-hist-item:hover {
+  background: rgba(255, 255, 255, 0.028);
+}
+
+.nx-hist-prompt {
+  font-size: 12.5px;
+  color: var(--text);
+}
+
+.nx-hist-meta {
+  font-size: 10px;
+  color: var(--dim);
+  font-family: var(--mono);
+}
+
+/* ── Scrollbars ────────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dim);
+}

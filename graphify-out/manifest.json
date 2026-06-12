@@ -1,17 +1,57 @@
 {
-  "AARADHYA_MASTER_v89.md": {
-    "mtime": 1781087367.192309,
-    "ast_hash": "047df849a692d93430483a23b1ab4df4",
-    "semantic_hash": "047df849a692d93430483a23b1ab4df4"
-  },
   "Claude_Nexus_Session.md": {
-    "mtime": 1781087021.0621104,
-    "ast_hash": "5161092c3f00e04cf4a09d993c107a8f",
-    "semantic_hash": "5161092c3f00e04cf4a09d993c107a8f"
+    "mtime": 1781088499.6755066,
+    "ast_hash": "7ab7d4a59fc6229dd42a554ed49be5dc",
+    "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1781087605.7271006,
-    "ast_hash": "511893a195880342905e9ca5e4004a2a",
-    "semantic_hash": "511893a195880342905e9ca5e4004a2a"
+    "mtime": 1781226452.0,
+    "ast_hash": "a606da0c463a6d4bf03cf6dab104e791",
+    "semantic_hash": ""
+  },
+  "Nexus_V0/backend/main.py": {
+    "mtime": 1781285016.5921981,
+    "ast_hash": "dd6d808e30fb4a20f6e4bda6100c2ca6",
+    "semantic_hash": ""
+  },
+  "Nexus_V0/frontend/package.json": {
+    "mtime": 1781088308.2626357,
+    "ast_hash": "d9c19442398951f9e2dc1d157f31adec",
+    "semantic_hash": ""
+  },
+  "Nexus_V0/frontend/src/App.jsx": {
+    "mtime": 1781284998.103402,
+    "ast_hash": "32507e3d40fe233789d7b1ddb618ef44",
+    "semantic_hash": ""
+  },
+  "Nexus_V0/frontend/src/main.jsx": {
+    "mtime": 1781088342.4088092,
+    "ast_hash": "25f31ea08f610477bc3467d7c30dc602",
+    "semantic_hash": ""
+  },
+  "Nexus_V0/frontend/vite.config.js": {
+    "mtime": 1781088346.8686879,
+    "ast_hash": "16db3415854d67c2367aed539387d29c",
+    "semantic_hash": ""
+  },
+  "Nexus_Day1_TaskPlan.md": {
+    "mtime": 1781156565.869554,
+    "ast_hash": "902af340d3f402d1b37832c639c05059",
+    "semantic_hash": ""
+  },
+  "Nexus_Day2_TaskPlan.md": {
+    "mtime": 1781155093.8232358,
+    "ast_hash": "c91c8002b7eb28d399f849ee2c639ab1",
+    "semantic_hash": ""
+  },
+  "Nexus_V0/backend/requirements.txt": {
+    "mtime": 1781226452.0,
+    "ast_hash": "3e4c9214a80c8a9381e0446599330b8a",
+    "semantic_hash": ""
+  },
+  "Nexus_V0/frontend/index.html": {
+    "mtime": 1781088314.8528068,
+    "ast_hash": "269ef49637da1c5550fe6c8a01c6fc6e",
+    "semantic_hash": ""
   }
 }
