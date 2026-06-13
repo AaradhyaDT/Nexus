@@ -137,6 +137,10 @@ textarea {
   color: var(--dim);
 }
 
+.nx-field-sm {
+  width: 80px;
+}
+
 .nx-create-btn {
   align-self: flex-end;
   background: var(--accent);
@@ -230,7 +234,7 @@ textarea {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
   padding: 22px 26px 20px;
   gap: 14px;
 }
@@ -248,7 +252,7 @@ textarea {
 .nx-header-start {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
 .nx-header-actions {
@@ -262,6 +266,26 @@ textarea {
   font-size: 15px;
   font-weight: 500;
   color: var(--text);
+}
+
+/* T14 — settings gear button */
+.nx-settings-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--dim);
+  font-size: 13px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.nx-settings-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .nx-theme-btn,
@@ -397,26 +421,12 @@ textarea {
   animation: dot 0.9s ease-in-out infinite;
 }
 
-.nx-dots span:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.nx-dots span:nth-child(3) {
-  animation-delay: 0.30s;
-}
+.nx-dots span:nth-child(2) { animation-delay: 0.15s; }
+.nx-dots span:nth-child(3) { animation-delay: 0.30s; }
 
 @keyframes dot {
-
-  0%,
-  100% {
-    opacity: 0.25;
-    transform: scale(0.75);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.1);
-  }
+  0%, 100% { opacity: 0.25; transform: scale(0.75); }
+  50%       { opacity: 1;    transform: scale(1.1); }
 }
 
 /* ── Error ─────────────────────────────────────────────────────────────────── */
@@ -434,8 +444,8 @@ textarea {
 /* ── Results ───────────────────────────────────────────────────────────────── */
 
 .nx-results {
-  flex: 1;
-  min-height: 0;
+  flex-shrink: 0;
+  min-height: 240px;
   display: grid;
   grid-template-columns: repeat(var(--cols, 2), 1fr);
   gap: 10px;
@@ -449,18 +459,12 @@ textarea {
   border-radius: var(--r);
   overflow: hidden;
   animation: slide-in 0.18s ease;
+  max-height: 400px;
 }
 
 @keyframes slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .nx-col-head {
@@ -483,8 +487,6 @@ textarea {
   padding: 13px;
 }
 
-/* Signature element: model outputs rendered in monospace —
-   treating responses as data to evaluate, not gospel */
 .nx-output {
   font-family: var(--mono);
   font-size: 12.5px;
@@ -492,6 +494,153 @@ textarea {
   color: var(--text);
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+/* ── T13: Notes ────────────────────────────────────────────────────────────── */
+
+.nx-notes-section {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.nx-notes-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nx-notes-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: rgba(200, 168, 75, 0.15);
+  border: 1px solid rgba(200, 168, 75, 0.35);
+  border-radius: 8px;
+  font-size: 9px;
+  color: var(--accent);
+  margin-left: 4px;
+  font-family: var(--mono);
+}
+
+.nx-notes-body {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nx-note-input-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.nx-note-textarea {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 12.5px;
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+  transition: border-color 0.12s;
+}
+
+.nx-note-textarea:focus {
+  border-color: var(--dim);
+}
+
+.nx-note-textarea::placeholder {
+  color: var(--dim);
+}
+
+.nx-note-save {
+  background: transparent;
+  border: 1px solid var(--accent);
+  border-radius: var(--r);
+  color: var(--accent);
+  padding: 6px 13px;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+
+.nx-note-save:hover:not(:disabled) {
+  background: rgba(200, 168, 75, 0.12);
+}
+
+.nx-note-save:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.nx-note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.nx-note-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  animation: slide-in 0.14s ease;
+}
+
+.nx-note-content {
+  flex: 1;
+  font-size: 12px;
+  color: var(--sub);
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+.nx-note-del {
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  flex-shrink: 0;
+  transition: color 0.12s;
+}
+
+.nx-note-del:hover {
+  color: var(--danger);
+}
+
+.nx-notes-empty {
+  font-size: 11.5px;
+  color: var(--dim);
+  font-style: italic;
+}
+
+/* shared toast */
+.nx-toast {
+  font-size: 11px;
+  color: var(--accent);
+  font-family: var(--mono);
+  animation: fade-toast 2s ease forwards;
+}
+
+@keyframes fade-toast {
+  0%   { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* ── History ───────────────────────────────────────────────────────────────── */
@@ -525,7 +674,7 @@ textarea {
   color: var(--sub);
   padding: 6px 10px;
   font-size: 12px;
-  transition: color 0.12s, border-color 0.12s, background 0.12s;
+  transition: color 0.12s, border-color 0.12s;
 }
 
 .nx-clear-history:hover {
@@ -573,6 +722,155 @@ textarea {
   font-family: var(--mono);
 }
 
+/* ── T14: Settings Modal ───────────────────────────────────────────────────── */
+
+.nx-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(2px);
+  animation: fade-in 0.15s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.nx-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 480px;
+  max-width: calc(100vw - 40px);
+  display: flex;
+  flex-direction: column;
+  animation: modal-in 0.18s ease;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nx-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nx-modal-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.nx-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  font-size: 14px;
+  transition: color 0.12s;
+}
+
+.nx-modal-close:hover {
+  color: var(--text);
+}
+
+.nx-modal-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nx-modal-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.nx-modal-textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  padding: 10px 12px;
+  font-size: 12.5px;
+  font-family: var(--mono);
+  resize: vertical;
+  outline: none;
+  line-height: 1.6;
+  transition: border-color 0.12s;
+}
+
+.nx-modal-textarea:focus {
+  border-color: var(--accent);
+}
+
+.nx-modal-hint {
+  font-size: 11px;
+  color: var(--dim);
+  margin-top: -4px;
+}
+
+.nx-modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.nx-modal-cancel {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--sub);
+  padding: 6px 14px;
+  font-size: 12.5px;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.nx-modal-cancel:hover {
+  border-color: var(--sub);
+  color: var(--text);
+}
+
+.nx-modal-save {
+  background: var(--accent);
+  color: #0c0c0e;
+  border: none;
+  border-radius: var(--r);
+  padding: 6px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: opacity 0.12s;
+}
+
+.nx-modal-save:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.nx-modal-save:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Light theme ───────────────────────────────────────────────────────────── */
+
 :root.light {
   --bg: #f7f7f8;
   --surface: #ffffff;
@@ -594,7 +892,9 @@ textarea {
 
 :root.light .nx-sidebar,
 :root.light .nx-col,
-:root.light .nx-textarea {
+:root.light .nx-textarea,
+:root.light .nx-note-textarea,
+:root.light .nx-modal {
   background: var(--surface);
 }
 
@@ -620,6 +920,22 @@ textarea {
 :root.light .nx-theme-btn:hover,
 :root.light .nx-clear-history:hover {
   color: var(--text);
+}
+
+:root.light .nx-modal-textarea {
+  background: var(--bg);
+}
+
+:root.light .nx-modal-backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+:root.light .nx-modal-save {
+  color: #fff;
+}
+
+:root.light .nx-note-item {
+  background: var(--surface);
 }
 
 /* ── Scrollbars ────────────────────────────────────────────────────────────── */

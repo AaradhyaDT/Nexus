@@ -28,6 +28,20 @@ export default function App() {
   const [newEmail, setNewEmail]       = useState("")
   const [error, setError]             = useState("")
   const [theme, setTheme]             = useState("dark")
+  // T13 — Notes
+  const [notesOpen, setNotesOpen]     = useState(false)
+  const [notes, setNotes]             = useState([])
+  const [noteText, setNoteText]       = useState("")
+  const [noteSaving, setNoteSaving]   = useState(false)
+  const [noteToast, setNoteToast]     = useState(false)
+  // T14 — Settings modal
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [editPrompt, setEditPrompt]   = useState("")
+  const [editEmail, setEditEmail]     = useState("")
+  const [editGIndex, setEditGIndex]   = useState(0)
+  const [settingsSaving, setSettingsSaving] = useState(false)
+  const [settingsToast, setSettingsToast]   = useState(false)
+
   const nameRef = useRef(null)
 
   useEffect(() => {
@@ -37,7 +51,10 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (active) fetchHistory(active.id)
+    if (active) {
+      fetchHistory(active.id)
+      fetchNotes(active.id)
+    }
   }, [active])
 
   useEffect(() => {
@@ -48,6 +65,15 @@ export default function App() {
     document.documentElement.classList.toggle("light", theme === "light")
     localStorage.setItem("theme", theme)
   }, [theme])
+
+  // Populate settings form when modal opens
+  useEffect(() => {
+    if (settingsOpen && active) {
+      setEditPrompt(active.prompt || "You are a helpful expert assistant.")
+      setEditEmail(active.g_email || "")
+      setEditGIndex(active.g_index ?? 0)
+    }
+  }, [settingsOpen, active])
 
   async function bootstrap() {
     const [pRes, mRes] = await Promise.all([
@@ -66,6 +92,13 @@ export default function App() {
     setHistory(await r.json())
   }
 
+  async function fetchNotes(id) {
+    try {
+      const r = await fetch(`${API}/projects/${id}/notes`)
+      if (r.ok) setNotes(await r.json())
+    } catch { setNotes([]) }
+  }
+
   async function createProject() {
     if (!newName.trim()) return
     const r = await fetch(`${API}/projects`, {
@@ -77,6 +110,7 @@ export default function App() {
     setProjects(prev => [...prev, p])
     setActive(p)
     setHistory([])
+    setNotes([])
     setNewName("")
     setNewEmail("")
     setCreating(false)
@@ -123,14 +157,76 @@ export default function App() {
   async function clearHistory() {
     if (!active) return
     try {
-      await fetch(`${API}/projects/${active.id}/history`, {
-        method: "DELETE"
-      })
+      await fetch(`${API}/projects/${active.id}/history`, { method: "DELETE" })
     } catch (e) {
       console.warn("Failed to clear history", e)
     }
     setHistory([])
     setResults(null)
+  }
+
+  // T13 — save note
+  async function saveNote() {
+    if (!noteText.trim() || !active) return
+    setNoteSaving(true)
+    try {
+      await fetch(`${API}/notes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: active.id, content: noteText.trim() }),
+      })
+      setNoteText("")
+      await fetchNotes(active.id)
+      setNoteToast(true)
+      setTimeout(() => setNoteToast(false), 2000)
+    } finally {
+      setNoteSaving(false)
+    }
+  }
+
+  // T13 — delete note
+  async function deleteNote(noteId) {
+    if (!active) return
+    try {
+      await fetch(`${API}/projects/${active.id}/notes/${noteId}`, { method: "DELETE" })
+      setNotes(prev => prev.filter(n => n.id !== noteId))
+    } catch (e) {
+      console.warn("Failed to delete note", e)
+    }
+  }
+
+  // T14 — save project settings
+  async function saveSettings() {
+    if (!active) return
+    setSettingsSaving(true)
+    try {
+      const r = await fetch(`${API}/projects/${active.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: editPrompt,
+          g_email: editEmail,
+          g_index: Number(editGIndex),
+        }),
+      })
+      if (!r.ok) throw new Error(`HTTP ${r.status}`)
+      // Update local state
+      const updated = {
+        ...active,
+        prompt: editPrompt,
+        g_email: editEmail,
+        g_index: Number(editGIndex),
+      }
+      setActive(updated)
+      setProjects(prev => prev.map(p => p.id === active.id ? updated : p))
+      setSettingsToast(true)
+      setTimeout(() => {
+        setSettingsToast(false)
+        setSettingsOpen(false)
+      }, 1200)
+    } finally {
+      setSettingsSaving(false)
+    }
   }
 
   function toggleTheme() {
@@ -203,6 +299,15 @@ export default function App() {
         <header className="nx-header">
           <div className="nx-header-start">
             <h1 className="nx-title">{active?.name ?? "—"}</h1>
+            {active && (
+              <button
+                className="nx-settings-btn"
+                onClick={() => setSettingsOpen(true)}
+                title="Project settings"
+              >
+                ⚙
+              </button>
+            )}
           </div>
           <div className="nx-header-actions">
             <button className="nx-theme-btn" onClick={toggleTheme}>
@@ -260,6 +365,60 @@ export default function App() {
           </div>
         )}
 
+        {/* ── T13: Notes Panel ── */}
+        {active && (
+          <div className="nx-notes-section">
+            <div className="nx-notes-header">
+              <button className="nx-hist-toggle" onClick={() => setNotesOpen(o => !o)}>
+                {notesOpen ? "▾" : "▸"} Notes
+                {notes.length > 0 && <span className="nx-notes-badge">{notes.length}</span>}
+              </button>
+              {noteToast && <span className="nx-toast">Note saved</span>}
+            </div>
+            {notesOpen && (
+              <div className="nx-notes-body">
+                <div className="nx-note-input-wrap">
+                  <textarea
+                    className="nx-note-textarea"
+                    value={noteText}
+                    onChange={e => setNoteText(e.target.value)}
+                    placeholder="Add a project note — injected as context on next query"
+                    rows={3}
+                    onKeyDown={e => {
+                      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveNote()
+                    }}
+                  />
+                  <button
+                    className="nx-note-save"
+                    onClick={saveNote}
+                    disabled={noteSaving || !noteText.trim()}
+                  >
+                    {noteSaving ? "Saving…" : "Save note"}
+                  </button>
+                </div>
+                {notes.length > 0 && (
+                  <div className="nx-note-list">
+                    {notes.map(n => (
+                      <div key={n.id} className="nx-note-item">
+                        <span className="nx-note-content">{n.content}</span>
+                        <button
+                          className="nx-note-del"
+                          onClick={() => deleteNote(n.id)}
+                          title="Delete note"
+                        >×</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {notes.length === 0 && (
+                  <p className="nx-notes-empty">No notes yet — notes are silently injected as context when relevant.</p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── History ── */}
         {history.length > 0 && (
           <div className="nx-hist-section">
             <div className="nx-hist-row">
@@ -288,6 +447,68 @@ export default function App() {
         )}
 
       </main>
+
+      {/* ── T14: Settings Modal ── */}
+      {settingsOpen && (
+        <div className="nx-modal-backdrop" onClick={() => setSettingsOpen(false)}>
+          <div className="nx-modal" onClick={e => e.stopPropagation()}>
+            <div className="nx-modal-head">
+              <span className="nx-modal-title">Project settings — {active?.name}</span>
+              <button className="nx-modal-close" onClick={() => setSettingsOpen(false)}>✕</button>
+            </div>
+
+            <div className="nx-modal-body">
+              <label className="nx-modal-label">System prompt</label>
+              <textarea
+                className="nx-modal-textarea"
+                value={editPrompt}
+                onChange={e => setEditPrompt(e.target.value)}
+                rows={6}
+                placeholder="You are a helpful expert assistant."
+              />
+
+              <label className="nx-modal-label">Google account email</label>
+              <input
+                className="nx-field"
+                value={editEmail}
+                onChange={e => setEditEmail(e.target.value)}
+                placeholder="your@gmail.com"
+              />
+
+              <label className="nx-modal-label">Google account index</label>
+              <input
+                className="nx-field nx-field-sm"
+                type="number"
+                min={0}
+                max={9}
+                value={editGIndex}
+                onChange={e => setEditGIndex(e.target.value)}
+              />
+              <p className="nx-modal-hint">
+                Index 0 = first Chrome Google account (/u/0/), 1 = second, etc.
+              </p>
+            </div>
+
+            <div className="nx-modal-foot">
+              {settingsToast && <span className="nx-toast">Saved</span>}
+              <button
+                className="nx-modal-cancel"
+                onClick={() => setSettingsOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="nx-modal-save"
+                onClick={saveSettings}
+                disabled={settingsSaving}
+              >
+                {settingsSaving ? "Saving…" : "Save changes"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

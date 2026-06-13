@@ -7,6 +7,7 @@ from contextlib import contextmanager, asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import Optional
 import httpx
 from dotenv import load_dotenv
 
@@ -21,7 +22,6 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 @contextmanager
 def get_db():
-    # check_same_thread=False allows multi-threaded FastAPI async workers to use connections
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     try:
@@ -62,7 +62,7 @@ def init_db():
             """)
         except sqlite3.OperationalError:
             pass  # FTS5 unavailable — notes/context injection disabled
-            
+
         if not conn.execute("SELECT 1 FROM projects LIMIT 1").fetchone():
             conn.execute("INSERT INTO projects (name) VALUES ('Default')")
         conn.commit()
@@ -87,6 +87,12 @@ class ProjectCreate(BaseModel):
     g_index: int = 0
     g_email: str = ""
     prompt: str = "You are a helpful expert assistant."
+
+class ProjectUpdate(BaseModel):
+    name: Optional[str] = None
+    prompt: Optional[str] = None
+    g_index: Optional[int] = None
+    g_email: Optional[str] = None
 
 class NoteCreate(BaseModel):
     project_id: int
@@ -164,8 +170,7 @@ async def call_gemini(prompt: str, system: str, client: httpx.AsyncClient) -> st
             timeout=30
         )
         if r.status_code != 200:
-            err_text = r.text
-            raise RuntimeError(f"Gemini request failed {r.status_code}: {err_text}")
+            raise RuntimeError(f"Gemini request failed {r.status_code}: {r.text}")
         data = r.json()
         return parse_gemini(data)
     return await with_rotation(GEMINI_KEYS, _req)
@@ -205,7 +210,7 @@ def list_models():
 def list_projects():
     with get_db() as conn:
         rows = conn.execute(
-            "SELECT id, name, g_index, g_email FROM projects ORDER BY id"
+            "SELECT id, name, g_index, g_email, prompt FROM projects ORDER BY id"
         ).fetchall()
     return [dict(r) for r in rows]
 
@@ -217,7 +222,21 @@ def create_project(p: ProjectCreate):
             (p.name, p.g_index, p.g_email, p.prompt)
         )
         pid = cur.lastrowid
-    return {"id": pid, "name": p.name, "g_index": p.g_index, "g_email": p.g_email}
+    return {"id": pid, "name": p.name, "g_index": p.g_index, "g_email": p.g_email, "prompt": p.prompt}
+
+@app.patch("/projects/{project_id}")
+def update_project(project_id: int, p: ProjectUpdate):
+    fields, vals = [], []
+    if p.name is not None:    fields.append("name=?");    vals.append(p.name)
+    if p.prompt is not None:  fields.append("prompt=?");  vals.append(p.prompt)
+    if p.g_index is not None: fields.append("g_index=?"); vals.append(p.g_index)
+    if p.g_email is not None: fields.append("g_email=?"); vals.append(p.g_email)
+    if not fields:
+        raise HTTPException(400, "Nothing to update")
+    vals.append(project_id)
+    with get_db() as conn:
+        conn.execute(f"UPDATE projects SET {', '.join(fields)} WHERE id=?", vals)
+    return {"status": "updated"}
 
 @app.get("/projects/{project_id}/messages")
 def get_messages(project_id: int):
@@ -228,11 +247,11 @@ def get_messages(project_id: int):
             (project_id,)
         ).fetchall()
     return [{
-        "id":         r["id"],
-        "prompt":     r["prompt"],
-        "responses":  json.loads(r["responses"]),
-        "models_used":json.loads(r["models_used"]),
-        "timestamp":  r["timestamp"]
+        "id":          r["id"],
+        "prompt":      r["prompt"],
+        "responses":   json.loads(r["responses"]),
+        "models_used": json.loads(r["models_used"]),
+        "timestamp":   r["timestamp"]
     } for r in rows]
 
 @app.post("/query")
@@ -271,6 +290,30 @@ def add_note(note: NoteCreate):
                 (str(note.project_id), note.content)
             )
         return {"status": "saved"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Notes unavailable: {e}")
+
+@app.get("/projects/{project_id}/notes")
+def get_notes(project_id: int):
+    try:
+        with get_db() as conn:
+            rows = conn.execute(
+                "SELECT rowid, content FROM project_notes_fts WHERE project_id=? ORDER BY rowid DESC LIMIT 50",
+                (str(project_id),)
+            ).fetchall()
+        return [{"id": r["rowid"], "content": r["content"]} for r in rows]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Notes unavailable: {e}")
+
+@app.delete("/projects/{project_id}/notes/{note_id}")
+def delete_note(project_id: int, note_id: int):
+    try:
+        with get_db() as conn:
+            conn.execute(
+                "DELETE FROM project_notes_fts WHERE rowid=? AND project_id=?",
+                (note_id, str(project_id))
+            )
+        return {"status": "deleted"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Notes unavailable: {e}")
 
