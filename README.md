@@ -33,6 +33,8 @@ No PostgreSQL. No ChromaDB. No OAuth token storage. Single `nexus.db` file.
 - **Project workspaces** — create/switch projects; all history is project-scoped
 - **Multi-model parallel fan-out** — Groq + Gemini respond simultaneously, displayed side-by-side
 - **Persistent history** — every query auto-saved to SQLite; loads on project switch
+- **Clear history** — frontend clear action deletes project history via backend endpoint
+- **Dark/light theme toggle** — persisted in `localStorage` across reloads
 - **FTS5 context injection** — save notes to a project; they're silently prepended as context when relevant
 - **Google account routing** — each project maps to a Google account index (`/u/0`, `/u/1`); sidebar links open Gmail/Drive/Calendar for the right account directly
 - **Multi-key rotation** — comma-separated key pools per model; auto-retries on 429/401
@@ -45,9 +47,9 @@ No PostgreSQL. No ChromaDB. No OAuth token storage. Single `nexus.db` file.
 
 ```bash
 cd backend
-python -m venv venv
-venv\Scripts\activate          # Windows
-# source venv/bin/activate     # Linux/Mac
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # Linux/Mac
 
 pip install -r requirements.txt
 
@@ -66,6 +68,16 @@ npm run dev
 ```
 
 Open `http://localhost:5173`.
+
+### One-click start
+
+From the repo root, run:
+
+```bat
+start-nexus.bat
+```
+
+This launches the backend, frontend, and opens the browser automatically.
 
 ### .env format
 
