@@ -4,7 +4,7 @@
 ---
 
 ## Summary
-Backend and frontend are both running with the current task flow validated. Gemini integration and history controls have been updated, and the startup script path has been corrected.
+Backend and frontend implementation is wired and the core task flow is in place. Gemini integration and history controls are updated, theme persistence is implemented, and the startup script path has been corrected.
 
 ---
 
@@ -23,7 +23,6 @@ Backend and frontend are both running with the current task flow validated. Gemi
 ### In progress / To verify
 - [ ] Confirm Gemini endpoint is supported and responding with the configured API keys
 - [ ] Confirm history deletion removes records from SQLite `history` table
-- [ ] Confirm theme persists across reloads via `localStorage`
 - [ ] Confirm backend and frontend launch successfully via `start-nexus.bat`
 
 ### Notes
@@ -34,5 +33,7 @@ Backend and frontend are both running with the current task flow validated. Gemi
 
 ## Next actions
 1. Verify the Gemini key/model combination with the live API and adjust endpoint if required.
-2. Add a small success notification for cleared history in the frontend.
-3. Update the plan docs with any remaining Day 2 or Day 3 tasks once the feature set is stable.
+2. Verify history deletion removes records from the SQLite `history` table.
+3. Run `start-nexus.bat` and confirm both backend and frontend launch cleanly.
+4. Add a small success notification for cleared history in the frontend.
+5. Update the plan docs with any remaining Day 2 or Day 3 tasks once the feature set is stable.
