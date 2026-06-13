@@ -268,18 +268,19 @@ textarea {
   color: var(--text);
 }
 
-/* T14 — settings gear button */
+/* T14 — settings button */
 .nx-settings-btn {
   background: transparent;
   border: 1px solid var(--border);
   border-radius: var(--r);
-  color: var(--dim);
-  font-size: 13px;
-  width: 26px;
-  height: 26px;
+  color: var(--sub);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  height: 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
   transition: border-color 0.12s, color 0.12s;
 }
 
@@ -869,6 +870,106 @@ textarea {
   cursor: not-allowed;
 }
 
+/* ── Markdown output ───────────────────────────────────────────────────────── */
+
+.nx-md-body {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.nx-md-p {
+  margin-bottom: 10px;
+}
+
+.nx-md-p:last-child {
+  margin-bottom: 0;
+}
+
+.nx-md-h1 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 14px 0 6px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.nx-md-h2 {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 12px 0 5px;
+}
+
+.nx-md-h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 10px 0 4px;
+}
+
+.nx-md-ul,
+.nx-md-ol {
+  padding-left: 18px;
+  margin-bottom: 10px;
+}
+
+.nx-md-ul li,
+.nx-md-ol li {
+  margin-bottom: 3px;
+  line-height: 1.65;
+}
+
+.nx-md-hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+
+.nx-inline-code {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  background: rgba(200, 168, 75, 0.1);
+  border: 1px solid rgba(200, 168, 75, 0.2);
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: var(--accent);
+}
+
+.nx-code-block {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.nx-code-lang {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding: 5px 10px 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nx-code-block pre {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+}
+
+.nx-code-block code {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre;
+}
+
 /* ── Light theme ───────────────────────────────────────────────────────────── */
 
 :root.light {
@@ -936,6 +1037,16 @@ textarea {
 
 :root.light .nx-note-item {
   background: var(--surface);
+}
+
+:root.light .nx-code-block {
+  background: var(--raised);
+}
+
+:root.light .nx-inline-code {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.2);
+  color: var(--accent);
 }
 
 /* ── Scrollbars ────────────────────────────────────────────────────────────── */

@@ -2,6 +2,96 @@ import { useState, useEffect, useRef } from "react"
 
 const API = "http://localhost:8000"
 
+// Lightweight markdown renderer — no deps, covers LLM output patterns
+function renderMarkdown(text) {
+  if (!text) return []
+  const lines = text.split("\n")
+  const elements = []
+  let i = 0
+  let key = 0
+
+  // Inline formatting: **bold**, *italic*, `code`, and plain text
+  function parseInline(str) {
+    const parts = []
+    // Split on **bold**, *italic*, `code`
+    const re = /(\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`)/g
+    let last = 0, m
+    while ((m = re.exec(str)) !== null) {
+      if (m.index > last) parts.push(str.slice(last, m.index))
+      if (m[2] !== undefined) parts.push(<strong key={key++}>{m[2]}</strong>)
+      else if (m[3] !== undefined) parts.push(<em key={key++}>{m[3]}</em>)
+      else if (m[4] !== undefined) parts.push(<code key={key++} className="nx-inline-code">{m[4]}</code>)
+      last = m.index + m[0].length
+    }
+    if (last < str.length) parts.push(str.slice(last))
+    return parts
+  }
+
+  while (i < lines.length) {
+    const line = lines[i]
+
+    // Fenced code block
+    if (line.startsWith("```")) {
+      const lang = line.slice(3).trim()
+      const codeLines = []
+      i++
+      while (i < lines.length && !lines[i].startsWith("```")) {
+        codeLines.push(lines[i])
+        i++
+      }
+      elements.push(
+        <div key={key++} className="nx-code-block">
+          {lang && <span className="nx-code-lang">{lang}</span>}
+          <pre><code>{codeLines.join("\n")}</code></pre>
+        </div>
+      )
+      i++
+      continue
+    }
+
+    // Headings
+    const h3 = line.match(/^### (.+)/)
+    const h2 = line.match(/^## (.+)/)
+    const h1 = line.match(/^# (.+)/)
+    if (h3) { elements.push(<h3 key={key++} className="nx-md-h3">{parseInline(h3[1])}</h3>); i++; continue }
+    if (h2) { elements.push(<h2 key={key++} className="nx-md-h2">{parseInline(h2[1])}</h2>); i++; continue }
+    if (h1) { elements.push(<h1 key={key++} className="nx-md-h1">{parseInline(h1[1])}</h1>); i++; continue }
+
+    // Horizontal rule
+    if (/^---+$/.test(line.trim())) { elements.push(<hr key={key++} className="nx-md-hr" />); i++; continue }
+
+    // Unordered list — collect consecutive items
+    if (/^[\-\*] /.test(line)) {
+      const items = []
+      while (i < lines.length && /^[\-\*] /.test(lines[i])) {
+        items.push(<li key={key++}>{parseInline(lines[i].slice(2))}</li>)
+        i++
+      }
+      elements.push(<ul key={key++} className="nx-md-ul">{items}</ul>)
+      continue
+    }
+
+    // Ordered list
+    if (/^\d+\. /.test(line)) {
+      const items = []
+      while (i < lines.length && /^\d+\. /.test(lines[i])) {
+        items.push(<li key={key++}>{parseInline(lines[i].replace(/^\d+\. /, ""))}</li>)
+        i++
+      }
+      elements.push(<ol key={key++} className="nx-md-ol">{items}</ol>)
+      continue
+    }
+
+    // Blank line
+    if (line.trim() === "") { elements.push(<br key={key++} />); i++; continue }
+
+    // Paragraph
+    elements.push(<p key={key++} className="nx-md-p">{parseInline(line)}</p>)
+    i++
+  }
+  return elements
+}
+
 const GOOGLE = [
   { label: "Gmail",    url: i => `https://mail.google.com/mail/u/${i}/` },
   { label: "Drive",    url: i => `https://drive.google.com/drive/u/${i}/` },
@@ -305,7 +395,7 @@ export default function App() {
                 onClick={() => setSettingsOpen(true)}
                 title="Project settings"
               >
-                ⚙
+                Settings
               </button>
             )}
           </div>
@@ -358,7 +448,7 @@ export default function App() {
                   <span className="nx-col-label">{MODEL_LABEL[model] ?? model}</span>
                 </div>
                 <div className="nx-col-body">
-                  <pre className="nx-output">{text}</pre>
+                  <div className="nx-md-body">{renderMarkdown(text)}</div>
                 </div>
               </div>
             ))}
