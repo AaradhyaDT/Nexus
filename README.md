@@ -88,6 +88,23 @@ GEMINI_API_KEYS=AIza_key1,AIza_key2
 
 ---
 
+## Repository Synchronization (`sync.ps1`)
+
+To prevent multi-branch drift and ensure safe secret management, version control runs through `sync.ps1`:
+
+```powershell
+.\sync.ps1                                   # Routine sync (secret scan, commit, rebase-push)
+.\sync.ps1 -m "feat(nexus): add new feature" # Custom conventional commit message
+.\sync.ps1 -PullOnly                         # Safely rebase and pull from origin/main
+.\sync.ps1 -WhatIf                           # Dry-run inspection without altering git state
+```
+
+- **Pre-Commit Secret Guard**: Blocks committing API keys, tokens, or `.env` credentials.
+- **Intelligent Conventional Commits**: Auto-classifies changes as `feat(nexus)`, `docs(nexus)`, `ci(nexus)`, or `chore(nexus)`.
+- **Safe Rebase**: Pulls remote commits with `--rebase --autostash` before pushing to `origin/main`.
+
+---
+
 ## API
 
 | Method | Route | Purpose |
