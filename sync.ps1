@@ -155,13 +155,25 @@ if (-not (Test-Path (Join-Path $repoRoot ".git"))) {
     exit 1
 }
 
+$currentBranch = (git branch --show-current).Trim()
+
+# Verification Gate
+if (Test-Path "scripts/verify.py") {
+    Write-Status "Running scripts/verify.py..."
+    python scripts/verify.py
+    if ($LASTEXITCODE -ne 0) {
+        Write-Failure "verify.py found errors. Fix them before committing."
+        exit $LASTEXITCODE
+    }
+}
+
 # 1. Pull Only Mode
 if ($PullOnly) {
-    Write-Status "Pulling latest updates with rebase..."
+    Write-Status "Pulling latest updates on $currentBranch with rebase..."
     if ($WhatIf) {
-        Write-Notice "[WhatIf] Would execute: git pull --rebase --autostash origin main"
+        Write-Notice "[WhatIf] Would execute: git pull --rebase --autostash origin $currentBranch"
     } else {
-        git pull --rebase --autostash origin main
+        git pull --rebase --autostash origin $currentBranch
         Write-Success "Pull complete."
     }
     exit 0
@@ -169,11 +181,11 @@ if ($PullOnly) {
 
 # 2. Push Only Mode
 if ($PushOnly) {
-    Write-Status "Pushing existing commits to origin main..."
+    Write-Status "Pushing existing commits to origin $currentBranch..."
     if ($WhatIf) {
-        Write-Notice "[WhatIf] Would execute: git push origin main"
+        Write-Notice "[WhatIf] Would execute: git push origin $currentBranch"
     } else {
-        git push origin main
+        git push -u origin $currentBranch
         Write-Success "Push complete."
     }
     exit 0
@@ -189,16 +201,16 @@ if (-not $hasChanges) {
         Write-Notice "Working directory clean, but unpushed commits exist:"
         $unpushed | ForEach-Object { Write-Host "  - $_" -ForegroundColor Yellow }
         if (-not $NoPush) {
-            Write-Status "Pushing unpushed commits to origin main..."
+            Write-Status "Pushing unpushed commits to origin $currentBranch..."
             if ($WhatIf) {
-                Write-Notice "[WhatIf] Would execute: git push origin main"
+                Write-Notice "[WhatIf] Would execute: git push origin $currentBranch"
             } else {
-                git push origin main
+                git push -u origin $currentBranch
                 Write-Success "Push complete."
             }
         }
     } else {
-        Write-Success "Working directory clean and up to date with origin/main. Nothing to commit."
+        Write-Success "Working directory clean and up to date with origin/$currentBranch. Nothing to commit."
     }
     exit 0
 }
@@ -216,7 +228,10 @@ if ($WhatIf) {
 
 # 5. Fetch remote updates
 Write-Status "Fetching remote updates..."
-git fetch origin main *> $null
+$remoteBranchExists = git ls-remote --heads origin $currentBranch 2>$null
+if ($remoteBranchExists) {
+    git fetch origin $currentBranch *> $null
+}
 
 # 6. Stage files
 Write-Status "Staging changes..."
@@ -253,9 +268,11 @@ Write-Success "Commit created."
 if ($NoPush) {
     Write-Notice "NoPush specified. Changes committed locally."
 } else {
-    Write-Status "Pushing with rebase to origin main..."
-    git pull --rebase --autostash origin main
-    git push origin main
+    Write-Status "Pushing to origin $currentBranch..."
+    if ($remoteBranchExists) {
+        git pull --rebase --autostash origin $currentBranch
+    }
+    git push -u origin $currentBranch
     if ($LASTEXITCODE -ne 0) {
         Write-Failure "Push failed."
         exit $LASTEXITCODE
